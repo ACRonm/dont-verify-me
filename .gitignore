@@ -1,0 +1,28 @@
+node_modules
+target
+dist
+logs
+.cache
+.DS_Store
+.idea
+.next
+.nx/cache
+.nx/workspace-data
+yarn-error.log
+npm-debug.log
+
+# Supabase
+/supabase/.branches/
+/supabase/.temp/
+/supabase/functions/.env
+!.env.example
+
+# Tamagui
+.tamagui/
+apps/web/tsconfig.tsbuildinfo
+apps/web/public/tamagui.css
+
+*.env
+agents.md
+
+apps/web/.env.local

@@ -1,0 +1,45 @@
+{
+	"name": "@dont-verify-me/web",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"test": "jest",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@react-email/components": "^0.3.2",
+		"@react-email/render": "^1.1.3",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/react": "^16.3.0",
+		"@dont-verify-me/shared-logic": "*",
+		"@dont-verify-me/ui": "*",
+		"@types/jest": "^30.0.0",
+		"jest": "^30.0.4",
+		"jest-environment-jsdom": "^30.0.4",
+		"next": "^15.3.5",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-email": "^4.2.4",
+		"resend": "^4.7.0",
+		"ts-jest": "^29.4.0"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3",
+		"@tailwindcss/postcss": "^4",
+		"@tamagui/next-plugin": "^1.131.3",
+		"@tamagui/toast": "^1.131.3",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"eslint": "^9",
+		"eslint-config-custom": "file:../../packages/eslint-config-custom",
+		"eslint-config-next": "15.3.5",
+		"prettier": "^3.6.2",
+		"tailwindcss": "^4",
+		"typescript": "^5"
+	}
+}

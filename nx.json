@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "nxCloudId": "686a595d37ab4b609444709e",
+  "projects": {
+    "web": {
+      "root": "apps/web",
+      "targets": {
+        "build": {
+          "executor": "nx:run-script",
+          "options": {
+            "script": "build"
+          }
+        }
+      }
+    }
+  }
+}

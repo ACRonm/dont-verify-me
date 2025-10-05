@@ -1,0 +1,34 @@
+{
+	"name": "@dont-verify-me/ui",
+	"version": "1.0.0",
+	"license": "MIT",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./tamagui.config": "./src/tamagui.config.ts",
+		"./auth/SignInScreen": "./src/auth/SignInScreen.tsx"
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.build.json",
+		"lint": "eslint . --ext .ts,.tsx",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@fontsource/inter": "^5.2.6",
+		"@fontsource/silkscreen": "^5.2.6",
+		"@tamagui/config": "^1.131.3",
+		"@tamagui/core": "^1.131.3",
+		"@tamagui/lucide-icons": "^1.132.10",
+		"@tamagui/popover": "^1.135.0",
+		"@tamagui/popper": "^1.131.3",
+		"tamagui": "^1.131.3"
+	},
+	"peerDependencies": {
+		"react": "*",
+		"react-dom": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.0.0"
+	}
+}

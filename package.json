@@ -1,0 +1,68 @@
+{
+	"name": "dont-verify-me",
+	"version": "1.0.0",
+	"private": true,
+	"description": "A platform that collates ways to bypass Australian social media age verification to maintain privacy",
+	"main": "index.js",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"type-check": "tsc --noEmit -p apps/web/tsconfig.json",
+		"dev:web": "npm run dev --workspace=@dont-verify-me/web"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ACRonm/dont-verify-me.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"bugs": {
+		"url": "https://github.com/ACRonm/dont-verify-me/issues"
+	},
+	"homepage": "https://github.com/ACRonm/dont-verify-me#readme",
+	"devDependencies": {
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.0",
+		"@types/jest": "^30.0.0",
+		"@types/next": "^9.0.0",
+		"jest": "^30.2.0",
+		"jest-environment-jsdom": "^30.2.0",
+		"mini-css-extract-plugin": "^2.9.4",
+		"next": "^15.5.4",
+		"nx": "21.6.3",
+		"supabase": "^2.48.3",
+		"ts-jest": "^29.4.4",
+		"ts-node": "^10.9.2"
+	},
+	"dependencies": {
+		"@fontsource/inter": "^5.2.8",
+		"@fontsource/silkscreen": "^5.2.8",
+		"@hcaptcha/react-hcaptcha": "^1.12.1",
+		"@react-email/components": "^0.5.5",
+		"@react-email/render": "^1.3.1",
+		"@supabase/ssr": "^0.7.0",
+		"@supabase/supabase-js": "^2.58.0",
+		"@tamagui/animations-css": "^1.135.0",
+		"@tamagui/avatar": "^1.135.0",
+		"@tamagui/card": "^1.135.0",
+		"@tamagui/config": "^1.135.0",
+		"@tamagui/lucide-icons": "^1.135.0",
+		"@tamagui/popper": "^1.135.0",
+		"@tamagui/tabs": "^1.135.0",
+		"@tamagui/toast": "^1.135.0",
+		"burnt": "^0.13.0",
+		"react-email": "^4.2.12",
+		"react-native-web": "^0.21.1",
+		"resend": "^6.1.2",
+		"tamagui": "^1.135.0"
+	},
+	"resolutions": {
+		"@tamagui/web": "1.131.3"
+	}
+}

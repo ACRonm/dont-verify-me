@@ -1,0 +1,16 @@
+{
+  "name": "eslint-config-custom",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@next/eslint-plugin-next": "*",
+    "eslint-plugin-prettier": "*",
+    "eslint-plugin-react": "*",
+    "eslint-plugin-react-hooks": "*",
+    "@typescript-eslint/parser": "*"
+  },
+  "peerDependencies": {
+    "typescript": "*"
+  }
+}
