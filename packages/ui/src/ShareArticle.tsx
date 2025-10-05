@@ -11,7 +11,12 @@ interface ShareArticleProps {
 	onShare?: () => void;
 }
 
-export function ShareArticle({ title, url, summary, onShare }: ShareArticleProps) {
+export function ShareArticle({
+	title,
+	url,
+	summary,
+	onShare,
+}: ShareArticleProps) {
 	const [copied, setCopied] = useState(false);
 
 	const handleShare = async () => {

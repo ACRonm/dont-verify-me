@@ -22,7 +22,15 @@ export function MFAWrapper({ children }: MFAWrapperProps) {
 			}
 
 			// Skip MFA check for certain pages
-			const skipPages = ["/mfa-verify", "/mfa-setup", "/login", "/signup", "/platforms", "/", "/privacy"];
+			const skipPages = [
+				"/mfa-verify",
+				"/mfa-setup",
+				"/login",
+				"/signup",
+				"/platforms",
+				"/",
+				"/privacy",
+			];
 			if (skipPages.some((page) => pathname.startsWith(page))) {
 				setReady(true);
 				return;

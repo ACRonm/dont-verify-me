@@ -17,7 +17,8 @@ export function PublicArticleView({
 	shareUrl,
 }: PublicArticleViewProps) {
 	// Generate the share URL if not provided
-	const url = shareUrl || (typeof window !== "undefined" ? window.location.href : "");
+	const url =
+		shareUrl || (typeof window !== "undefined" ? window.location.href : "");
 
 	return (
 		<ScrollView flex={1}>
