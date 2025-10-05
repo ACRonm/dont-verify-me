@@ -32,6 +32,7 @@ export default function MFASetupPage() {
 					enrollFunction={mfa.enroll}
 					challengeFunction={mfa.challenge}
 					verifyFunction={mfa.verify}
+					unenrollFunction={mfa.unenroll}
 				/>
 			</YStack>
 		</ThemedPage>
