@@ -22,7 +22,6 @@ export function Logo({ width = 35, height = 32, docked }: LogoProps) {
 			borderColor="transparent"
 			transition="all 0.3s ease-in-out"
 		>
-			<LogoDots size={Math.max(width, height)} />
 			<Text
 				fontFamily="$logoFont"
 				fontSize="$6"
@@ -31,6 +30,7 @@ export function Logo({ width = 35, height = 32, docked }: LogoProps) {
 			>
 				Dont Verify Me
 			</Text>
+			<LogoDots size={Math.max(width, height)} />
 		</XStack>
 	);
 }
