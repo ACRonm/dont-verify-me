@@ -14,7 +14,9 @@
 		"test:all": "jest --runInBand",
 		"test:watch": "jest --watch",
 		"type-check": "tsc --noEmit -p apps/web/tsconfig.json",
-		"dev:web": "npm run dev --workspace=@dont-verify-me/web"
+		"dev:web": "npm run dev --workspace=@dont-verify-me/web",
+		"format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+		"format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\""
 	},
 	"repository": {
 		"type": "git",

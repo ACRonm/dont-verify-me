@@ -45,7 +45,12 @@ export default function PlatformPage({ params }: { params: { slug: string } }) {
 		);
 	}
 
-	if (!platform || !article || !platform.is_published || !article.is_published) {
+	if (
+		!platform ||
+		!article ||
+		!platform.is_published ||
+		!article.is_published
+	) {
 		return (
 			<ThemedPage>
 				<LandingPageNavbar />

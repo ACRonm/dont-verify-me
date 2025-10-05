@@ -29,7 +29,12 @@ export function Logo({ width = 35, height = 32, docked }: LogoProps) {
 			borderColor="transparent"
 			transition="all 0.3s ease-in-out"
 		>
-			<Image src={logo} width={width} height={height} alt="Dont Verify Me Logo" />
+			<Image
+				src={logo}
+				width={width}
+				height={height}
+				alt="Dont Verify Me Logo"
+			/>
 			<Text
 				fontFamily="$logoFont"
 				fontSize="$6"

@@ -1,10 +1,4 @@
-import {
-	Avatar,
-	XStack,
-	YStack,
-	Button,
-	useMedia,
-} from "@dont-verify-me/ui";
+import { Avatar, XStack, YStack, Button, useMedia } from "@dont-verify-me/ui";
 import { Settings, LogOut, ChevronsUpDown } from "@tamagui/lucide-icons";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@dont-verify-me/shared-logic";

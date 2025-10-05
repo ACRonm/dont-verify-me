@@ -54,15 +54,17 @@ export function WelcomeEmail({ email }: Readonly<WelcomeEmailProps>) {
 			<Preview>Welcome to the Dont Verify Me Waitlist!</Preview>
 			<Body style={main}>
 				<Container style={container}>
-					<Heading style={heading}>Welcome to the Dont Verify Me Waitlist!</Heading>
+					<Heading style={heading}>
+						Welcome to the Dont Verify Me Waitlist!
+					</Heading>
 					<Text style={text}>
 						Thank you for signing up, {email}. We&apos;re excited to have you on
 						board.
 					</Text>
 					<Text style={text}>
-						We are working hard to bring you the best resources for bypassing Australian
-						social media age verification to maintain your privacy. You&apos;ll
-						be the first to know when we launch.
+						We are working hard to bring you the best resources for bypassing
+						Australian social media age verification to maintain your privacy.
+						You&apos;ll be the first to know when we launch.
 					</Text>
 					<Button style={btn} href="https://dontverifyme.app">
 						Visit our Website
