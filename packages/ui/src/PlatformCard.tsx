@@ -23,24 +23,25 @@ export function PlatformCard({
 			bordered
 			padding="$4"
 			backgroundColor="$background"
-			hoverStyle={{ scale: 0.98 }}
+			hoverStyle={{ borderColor: "$accent" }}
+			margin={"$2"}
 		>
 			<YStack gap="$3">
 				<XStack justifyContent="space-between" alignItems="center">
-				<H3>{platform.name}</H3>
-				<XStack gap="$2">
-					{platform.is_published ? (
-						<Eye size={20} color="$green10" />
-					) : (
-						<EyeOff size={20} color="$color10" />
-					)}
+					<H3>{platform.name}</H3>
+					<XStack gap="$2">
+						{platform.is_published ? (
+							<Eye size={20} color="$green10" />
+						) : (
+							<EyeOff size={20} color="$color10" />
+						)}
+					</XStack>
 				</XStack>
-			</XStack>				{platform.description && (
+				{platform.description && (
 					<Text color="$color11" fontSize="$3">
 						{platform.description}
 					</Text>
 				)}
-
 				<XStack gap="$2" marginTop="$2">
 					<Button
 						size="$3"
@@ -50,7 +51,6 @@ export function PlatformCard({
 					>
 						{hasArticle ? "Edit Article" : "Create Article"}
 					</Button>
-
 					<Button
 						size="$3"
 						onPress={onTogglePublish}
@@ -58,7 +58,6 @@ export function PlatformCard({
 					>
 						{platform.is_published ? "Unpublish" : "Publish"}
 					</Button>
-
 					<Button
 						size="$3"
 						onPress={onDelete}

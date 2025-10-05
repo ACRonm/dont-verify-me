@@ -1,6 +1,15 @@
 "use client";
 
-import { YStack, XStack, Input, TextArea, Label, Button, Text } from "tamagui";
+import {
+	YStack,
+	XStack,
+	Input,
+	TextArea,
+	Label,
+	Button,
+	Text,
+	Switch,
+} from "tamagui";
 import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -36,6 +45,9 @@ export function ArticleEditor({
 }: ArticleEditorProps) {
 	const [title, setTitle] = useState(initialData?.title || "");
 	const [summary, setSummary] = useState(initialData?.summary || "");
+	const [isPublished, setIsPublished] = useState(
+		initialData?.is_published ?? false
+	);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
@@ -57,14 +69,15 @@ export function ArticleEditor({
 		content: initialData?.content || "",
 		editorProps: {
 			attributes: {
-				class: "prose prose-sm sm:prose lg:prose-lg focus:outline-none min-h-[300px] p-4",
+				class:
+					"prose prose-sm sm:prose lg:prose-lg focus:outline-none min-h-[300px] p-4",
 			},
 		},
 	});
 
 	const handleSave = async () => {
 		const content = editor?.getHTML() || "";
-		
+
 		if (!title.trim() || !content.trim() || content === "<p></p>") {
 			setError("Title and content are required");
 			return;
@@ -78,6 +91,7 @@ export function ArticleEditor({
 				title: title.trim(),
 				summary: summary.trim(),
 				content: content,
+				is_published: isPublished,
 			});
 		} catch (err) {
 			setError("Failed to save article");
@@ -113,11 +127,15 @@ export function ArticleEditor({
 	}
 
 	return (
-		<YStack gap="$4" padding="$4" backgroundColor="$background" borderRadius="$4">
+		<YStack
+			gap="$4"
+			padding="$4"
+			backgroundColor="$background"
+			borderRadius="$4"
+		>
 			<Text fontSize="$6" fontWeight="bold">
-				{initialData?.id ? "Edit" : "Create"} Article for {platformName}
+				{`${initialData?.id ? "Edit" : "Create"} Article for ${platformName || "Platform"}`}
 			</Text>
-
 			<YStack gap="$2">
 				<Label htmlFor="title">Title</Label>
 				<Input
@@ -128,7 +146,6 @@ export function ArticleEditor({
 					placeholder="e.g., How to bypass age verification on Reddit"
 				/>
 			</YStack>
-
 			<YStack gap="$2">
 				<Label htmlFor="summary">Summary (Optional)</Label>
 				<TextArea
@@ -140,11 +157,24 @@ export function ArticleEditor({
 					numberOfLines={2}
 				/>
 			</YStack>
-
+			<XStack gap="$3" alignItems="center">
+				<Label htmlFor="is-published">Published</Label>
+				<Switch
+					id="is-published"
+					size="$3"
+					checked={isPublished}
+					onCheckedChange={setIsPublished}
+				>
+					<Switch.Thumb animation="quick" />
+				</Switch>
+				<Text fontSize="$3" color="$color10">
+					{isPublished
+						? "Article is visible to users"
+						: "Article is hidden (draft)"}
+				</Text>
+			</XStack>
 			<YStack gap="$2">
 				<Label>Content</Label>
-				
-				{/* Editor Toolbar */}
 				<XStack
 					gap="$2"
 					padding="$2"
@@ -214,8 +244,6 @@ export function ArticleEditor({
 						icon={<Link2 size={16} />}
 					/>
 				</XStack>
-
-				{/* Editor Content */}
 				<YStack
 					borderWidth={1}
 					borderColor="$borderColor"
@@ -223,20 +251,19 @@ export function ArticleEditor({
 					borderBottomRightRadius="$4"
 					backgroundColor="$background"
 					minHeight={300}
-				className="tiptap-wrapper"
-			>
-				<EditorContent editor={editor} />
+					className="tiptap-wrapper"
+				>
+					<EditorContent editor={editor} />
+				</YStack>
+				<Text fontSize="$2" color="$color10">
+					Rich text editor with formatting support
+				</Text>
 			</YStack>
-
-			<Text fontSize="$2" color="$color10">
-				Rich text editor with formatting support
-			</Text>
-		</YStack>			{error && (
+			{error.length > 0 && (
 				<Text color="$red10" fontSize="$3">
 					{error}
 				</Text>
 			)}
-
 			<XStack gap="$3" justifyContent="flex-end">
 				<Button onPress={onCancel} theme="gray" disabled={loading}>
 					Cancel

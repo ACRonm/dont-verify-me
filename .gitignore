@@ -28,3 +28,4 @@ agents.md
 apps/web/.env.local
 
 docs/
+.vscode/

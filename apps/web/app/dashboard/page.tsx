@@ -12,7 +12,7 @@ import {
 	Platform,
 } from "@dont-verify-me/shared-logic";
 import { useRouter } from "next/navigation";
-import { YStack, H1, Button, ScrollView, XStack, Text, Spinner } from "tamagui";
+import { YStack, H1, ScrollView, Text, Spinner, XStack, Button } from "tamagui";
 import { Plus } from "@tamagui/lucide-icons";
 
 export default function DashboardPage() {
@@ -23,6 +23,8 @@ export default function DashboardPage() {
 	>({});
 	const [loading, setLoading] = useState(true);
 	const [showCreateForm, setShowCreateForm] = useState(false);
+	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+	const [platformToDelete, setPlatformToDelete] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 
@@ -67,9 +69,16 @@ export default function DashboardPage() {
 		loadPlatforms();
 	};
 
-	const handleDelete = async (id: string) => {
-		if (confirm("Are you sure you want to delete this platform?")) {
-			await deletePlatform(id);
+	const handleDelete = (id: string) => {
+		setPlatformToDelete(id);
+		setShowDeleteDialog(true);
+	};
+
+	const confirmDelete = async () => {
+		if (platformToDelete) {
+			await deletePlatform(platformToDelete);
+			setShowDeleteDialog(false);
+			setPlatformToDelete(null);
 			loadPlatforms();
 		}
 	};
@@ -100,8 +109,12 @@ export default function DashboardPage() {
 	return (
 		<ThemedPage>
 			<ScrollView flex={1} padding="\$4">
-				<YStack gap="\$4" maxWidth={1200} alignSelf="center" width="100%">
-					<XStack justifyContent="space-between" alignItems="center">
+				<YStack gap="$4" maxWidth={1200} alignSelf="center" width="100%">
+					<XStack
+						marginHorizontal={"$2"}
+						justifyContent="space-between"
+						alignItems="center"
+					>
 						<H1>Content Management</H1>
 						<Button
 							icon={<Plus />}
@@ -119,9 +132,9 @@ export default function DashboardPage() {
 						/>
 					)}
 
-					<YStack gap="\$3">
+					<YStack gap="$3">
 						{platforms.length === 0 ? (
-							<Text color="\$gray11" textAlign="center" padding="\$6">
+							<Text color="$gray11" textAlign="center" padding="$6">
 								No platforms yet. Create one to get started!
 							</Text>
 						) : (
@@ -139,6 +152,62 @@ export default function DashboardPage() {
 					</YStack>
 				</YStack>
 			</ScrollView>
+
+			{showDeleteDialog && (
+				<YStack
+					position="absolute"
+					top={0}
+					left={0}
+					right={0}
+					bottom={0}
+					zIndex={100000}
+					alignItems="center"
+					justifyContent="center"
+					style={{ position: "fixed" }}
+				>
+					<YStack
+						position="absolute"
+						top={0}
+						left={0}
+						right={0}
+						bottom={0}
+						backgroundColor="rgba(0,0,0,0.5)"
+						onPress={() => setShowDeleteDialog(false)}
+					/>
+					<YStack
+						paddingVertical="$4"
+						paddingHorizontal="$6"
+						borderRadius="$6"
+						borderWidth={1}
+						borderColor="$borderColor"
+						backgroundColor="$background"
+						shadowColor="$shadowColor"
+						shadowRadius={20}
+						shadowOffset={{ width: 0, height: 10 }}
+						gap="$4"
+						width="90%"
+						maxWidth={500}
+						zIndex={100001}
+					>
+						<Text fontSize="$7" fontWeight="bold">
+							Delete Platform
+						</Text>
+						<Text color="$color10">
+							Are you sure you want to delete this platform? This action cannot
+							be undone.
+						</Text>
+
+						<XStack gap="$3" justifyContent="flex-end" marginTop="$2">
+							<Button theme="gray" onPress={() => setShowDeleteDialog(false)}>
+								Cancel
+							</Button>
+							<Button theme="red" onPress={confirmDelete}>
+								Delete
+							</Button>
+						</XStack>
+					</YStack>
+				</YStack>
+			)}
 		</ThemedPage>
 	);
 }
