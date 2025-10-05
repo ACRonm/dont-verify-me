@@ -209,7 +209,9 @@ export function MFASettings() {
 									theme="yellow"
 									onPress={handleCleanupUnverified}
 									disabled={cleaningUp}
-									icon={cleaningUp ? () => <Spinner color="$accent" /> : undefined}
+									icon={
+										cleaningUp ? () => <Spinner color="$accent" /> : undefined
+									}
 								>
 									{cleaningUp ? "Cleaning up..." : "Remove All Unverified"}
 								</Button>
@@ -246,7 +248,11 @@ export function MFASettings() {
 									theme="red"
 									onPress={() => handleRemoveFactor(factor.id)}
 									disabled={removing === factor.id}
-									icon={removing === factor.id ? () => <Spinner color="$accent" /> : undefined}
+									icon={
+										removing === factor.id
+											? () => <Spinner color="$accent" />
+											: undefined
+									}
 								>
 									{removing !== factor.id && "Remove"}
 								</Button>
