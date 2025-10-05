@@ -31,7 +31,6 @@ export * from "./BottomNavBar";
 
 // New CMS components
 export * from "./PlatformCard";
-export * from "./ArticleEditor";
 export * from "./PlatformForm";
 export * from "./PublicArticleView";
 

@@ -2,7 +2,8 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { ThemedPage, ArticleEditor } from "@dont-verify-me/ui";
+import { ThemedPage } from "@dont-verify-me/ui";
+import { ArticleEditor } from "@dont-verify-me/ui/ArticleEditor";
 import {
 	getPlatformBySlugAdmin,
 	getArticleByPlatformId,
