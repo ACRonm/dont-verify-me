@@ -104,220 +104,229 @@ describe('useAuth', () => {
     expect(supabase.auth.getSession).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle successful signInWithEmail', async () => {
-    const mockUser = {
-      id: 'user123',
-      email: 'test@example.com',
-      aud: 'authenticated',
-      app_metadata: {},
-      user_metadata: {},
-      created_at: new Date().toISOString(),
-      identities: [],
-    };
-    const mockSession = {
-      access_token: 'token',
-      token_type: 'Bearer',
-      expires_in: 3600,
-      expires_at: Date.now() / 1000 + 3600,
-      refresh_token: 'refresh_token',
-      user: mockUser,
-    };
+  it("should handle successful signInWithEmail", async () => {
+		const mockUser = {
+			id: "user123",
+			email: "test@example.com",
+			aud: "authenticated",
+			app_metadata: {},
+			user_metadata: {},
+			created_at: new Date().toISOString(),
+			identities: [],
+		};
+		const mockSession = {
+			access_token: "token",
+			token_type: "Bearer",
+			expires_in: 3600,
+			expires_at: Date.now() / 1000 + 3600,
+			refresh_token: "refresh_token",
+			user: mockUser,
+		};
 
-    (supabase.auth.signInWithPassword as jest.Mock).mockResolvedValueOnce({
-      data: { user: mockUser, session: mockSession },
-      error: null,
-    });
+		(supabase.auth.signInWithPassword as jest.Mock).mockResolvedValueOnce({
+			data: { user: mockUser, session: mockSession },
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    // Ensure initial loading is false after initial session check
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		// Ensure initial loading is false after initial session check
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    // Call signInWithEmail
-    const email = 'test@example.com';
-    const password = 'password123';
-    let signInPromise: Promise<any>;
+		// Call signInWithEmail
+		const email = "test@example.com";
+		const password = "password123";
+		let signInPromise: Promise<any>;
 
-    act(() => {
-      signInPromise = result.current.signInWithEmail(email, password);
-    });
+		act(() => {
+			signInPromise = result.current.signInWithEmail(email, password);
+		});
 
-    // Expect signInLoading to be true immediately after the call
-    expect(result.current.signInLoading).toBe(true);
+		// Expect signInLoading to be true immediately after the call
+		expect(result.current.signInLoading).toBe(true);
 
-    // Wait for the sign-in promise to resolve and state updates to flush
-    await act(async () => {
-      await signInPromise;
-    });
+		// Wait for the sign-in promise to resolve and state updates to flush
+		let signInResult;
+		await act(async () => {
+			signInResult = await signInPromise;
+		});
 
-    // Expect signInLoading to be false after resolution
-    expect(result.current.signInLoading).toBe(false);
+		// Expect signInLoading to be false after resolution
+		expect(result.current.signInLoading).toBe(false);
 
-    // Verify Supabase call
-    expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
-      email,
-      password,
-    });
+		// Verify Supabase call
+		expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
+			email,
+			password,
+		});
 
-    // Verify toast message
-    expect(mockToastController.show).toHaveBeenCalledWith('Login Successful', {
-      message: 'You have been successfully logged in!',
-      type: 'success',
-    });
+		// Verify toast message
+		expect(mockToastController.show).toHaveBeenCalledWith("Login Successful", {
+			message: "You have been successfully logged in!",
+			type: "success",
+		});
 
-    // Verify return value
-    expect(await signInPromise).toEqual({ success: true, message: 'Login successful!' });
-  });
+		// Verify return value
+		expect(signInResult).toEqual({
+			success: true,
+			message: "Login successful!",
+		});
+	});
 
-  it('should handle signInWithEmail error', async () => {
-    const mockError = new Error('Invalid login credentials');
-    (supabase.auth.signInWithPassword as jest.Mock).mockResolvedValueOnce({
-      data: { user: null, session: null },
-      error: mockError,
-    });
+	it("should handle signInWithEmail error", async () => {
+		const mockError = new Error("Invalid login credentials");
+		(supabase.auth.signInWithPassword as jest.Mock).mockResolvedValueOnce({
+			data: { user: null, session: null },
+			error: mockError,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const email = 'test@example.com';
-    const password = 'wrongpassword';
-    let signInPromise: Promise<any>;
+		const email = "test@example.com";
+		const password = "wrongpassword";
+		let signInPromise: Promise<any>;
 
-    act(() => {
-      signInPromise = result.current.signInWithEmail(email, password);
-    });
+		act(() => {
+			signInPromise = result.current.signInWithEmail(email, password);
+		});
 
-    expect(result.current.signInLoading).toBe(true);
+		expect(result.current.signInLoading).toBe(true);
 
-    await act(async () => {
-      await signInPromise;
-    });
+		let signInResult;
+		await act(async () => {
+			signInResult = await signInPromise;
+		});
 
-    expect(result.current.signInLoading).toBe(false);
+		expect(result.current.signInLoading).toBe(false);
 
-    expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
-      email,
-      password,
-    });
+		expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
+			email,
+			password,
+		});
 
-    expect(mockToastController.show).toHaveBeenCalledWith('Login Failed', {
-      type: 'error',
-    });
+		expect(mockToastController.show).toHaveBeenCalledWith("Login Failed", {
+			type: "error",
+		});
 
-    expect(await signInPromise).toEqual({ success: false, message: mockError.message });
-  });
+		expect(signInResult).toEqual({
+			success: false,
+			message: mockError.message,
+		});
+	});
 
-  it('should handle successful signUpWithEmail (confirmation email sent)', async () => {
-    const mockUser = {
-      id: 'user456',
-      email: 'newuser@example.com',
-      aud: 'authenticated',
-      app_metadata: {},
-      user_metadata: {},
-      created_at: new Date().toISOString(),
-      identities: [],
-    };
+	it("should handle successful signUpWithEmail (confirmation email sent)", async () => {
+		const mockUser = {
+			id: "user456",
+			email: "newuser@example.com",
+			aud: "authenticated",
+			app_metadata: {},
+			user_metadata: {},
+			created_at: new Date().toISOString(),
+			identities: [],
+		};
 
-    (supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
-      data: { user: mockUser, session: null }, // No session means confirmation email sent
-      error: null,
-    });
+		(supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
+			data: { user: mockUser, session: null }, // No session means confirmation email sent
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const email = 'newuser@example.com';
-    const password = 'newpassword123';
-    let signUpPromise: Promise<any>;
+		const email = "newuser@example.com";
+		const password = "newpassword123";
+		let signUpPromise: Promise<any>;
 
-    act(() => {
-      signUpPromise = result.current.signUpWithEmail(email, password);
-    });
+		act(() => {
+			signUpPromise = result.current.signUpWithEmail(email, password);
+		});
 
-    expect(result.current.signUpLoading).toBe(true);
+		expect(result.current.signUpLoading).toBe(true);
 
-    await act(async () => {
-      await signUpPromise;
-    });
+		let signUpResult;
+		await act(async () => {
+			signUpResult = await signUpPromise;
+		});
 
-    expect(result.current.signUpLoading).toBe(false);
+		expect(result.current.signUpLoading).toBe(false);
 
-    expect(supabase.auth.signUp).toHaveBeenCalledWith({
-      email,
-      password,
-    });
+		expect(supabase.auth.signUp).toHaveBeenCalledWith({
+			email,
+			password,
+		});
 
-    expect(mockToastController.show).toHaveBeenCalledWith('Confirmation Email Sent', {
-      message:
-        'Please check your email for a confirmation link. If you already have an account, please sign in.',
-      type: 'info',
-    });
+		expect(mockToastController.show).toHaveBeenCalledWith(
+			"Confirmation Email Sent",
+			{
+				message:
+					"Please check your email for a confirmation link. If you already have an account, please sign in.",
+				type: "info",
+			}
+		);
 
-    expect(await signUpPromise).toEqual({
-      success: true,
-      message:
-        'Please check your email for a confirmation link. If you already have an account, please sign in.',
-    });
-  });
+		expect(signUpResult).toEqual({
+			success: true,
+			message:
+				"Please check your email for a confirmation link. If you already have an account, please sign in.",
+		});
+	});
 
-  it('should handle successful signUpWithEmail (immediate login)', async () => {
-    const mockUser = {
-      id: 'user789',
-      email: 'anotheruser@example.com',
-      aud: 'authenticated',
-      app_metadata: {},
-      user_metadata: {},
-      created_at: new Date().toISOString(),
-      identities: [],
-    };
-    const mockSession = {
-      access_token: 'token_signup',
-      token_type: 'Bearer',
-      expires_in: 3600,
-      expires_at: Date.now() / 1000 + 3600,
-      refresh_token: 'refresh_token_signup',
-      user: mockUser,
-    };
+	it("should handle successful signUpWithEmail (immediate login)", async () => {
+		const mockUser = {
+			id: "user789",
+			email: "anotheruser@example.com",
+			aud: "authenticated",
+			app_metadata: {},
+			user_metadata: {},
+			created_at: new Date().toISOString(),
+			identities: [],
+		};
+		const mockSession = {
+			access_token: "token_signup",
+			token_type: "Bearer",
+			expires_in: 3600,
+			expires_at: Date.now() / 1000 + 3600,
+			refresh_token: "refresh_token_signup",
+			user: mockUser,
+		};
 
-    (supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
-      data: { user: mockUser, session: mockSession }, // Session means immediate login
-      error: null,
-    });
+		(supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
+			data: { user: mockUser, session: mockSession }, // Session means immediate login
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const email = 'anotheruser@example.com';
-    const password = 'anotherpassword123';
-    let signUpPromise: Promise<any>;
+		const email = "anotheruser@example.com";
+		const password = "anotherpassword123";
+		let signUpResult: any;
 
-    act(() => {
-      signUpPromise = result.current.signUpWithEmail(email, password);
-    });
+		await act(async () => {
+			signUpResult = await result.current.signUpWithEmail(email, password);
+		});
 
-    expect(result.current.signUpLoading).toBe(true);
+		expect(result.current.signUpLoading).toBe(false);
 
-    await act(async () => {
-      await signUpPromise;
-    });
+		expect(supabase.auth.signUp).toHaveBeenCalledWith({
+			email,
+			password,
+		});
 
-    expect(result.current.signUpLoading).toBe(false);
+		expect(mockToastController.show).toHaveBeenCalledWith("Signup Successful", {
+			message: "You have been successfully signed up and logged in!",
+			type: "success",
+		});
 
-    expect(supabase.auth.signUp).toHaveBeenCalledWith({
-      email,
-      password,
-    });
-
-    expect(mockToastController.show).toHaveBeenCalledWith('Signup Successful', {
-      message: 'You have been successfully signed up and logged in!',
-      type: 'success',
-    });
-
-    expect(await signUpPromise).toEqual({ success: true, message: 'Signup successful!' });
-  });
+		expect(signUpResult).toEqual({
+			success: true,
+			message: "Signup successful!",
+		});
+	});
 
   it('should handle signUpWithEmail error', async () => {
     const mockError = new Error('User already exists');
@@ -340,9 +349,10 @@ describe('useAuth', () => {
 
     expect(result.current.signUpLoading).toBe(true);
 
-    await act(async () => {
-      await signUpPromise;
-    });
+    let signUpResult;
+		await act(async () => {
+			signUpResult = await signUpPromise;
+		});
 
     expect(result.current.signUpLoading).toBe(false);
 
@@ -355,7 +365,10 @@ describe('useAuth', () => {
       type: 'error',
     });
 
-    expect(await signUpPromise).toEqual({ success: false, message: mockError.message });
+    expect(signUpResult).toEqual({
+			success: false,
+			message: mockError.message,
+		});
   });
 
   it('should handle signInWithOAuth (Google)', async () => {
