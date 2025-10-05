@@ -22,7 +22,10 @@
 		"@tamagui/lucide-icons": "^1.132.10",
 		"@tamagui/popover": "^1.135.0",
 		"@tamagui/popper": "^1.131.3",
-		"tamagui": "^1.131.3"
+		"tamagui": "^1.131.3",
+		"@tiptap/react": "^3.6.1",
+		"@tiptap/starter-kit": "^3.4.2",
+		"@tiptap/extension-link": "^3.4.1"
 	},
 	"peerDependencies": {
 		"react": "*",
