@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { XStack, Text, useThemeName } from "tamagui";
+import { XStack, Text } from "tamagui";
+import { LogoDots } from "./LogoDots";
 
 interface LogoProps {
 	width?: number;
@@ -8,13 +8,6 @@ interface LogoProps {
 }
 
 export function Logo({ width = 35, height = 32, docked }: LogoProps) {
-	const themeName = useThemeName();
-
-	const logo =
-		themeName === "dark"
-			? "/logo_final_dark_optimised.svg"
-			: "/logo_final_light_optimised.svg";
-
 	return (
 		<XStack
 			alignItems="center"
@@ -29,13 +22,7 @@ export function Logo({ width = 35, height = 32, docked }: LogoProps) {
 			borderColor="transparent"
 			transition="all 0.3s ease-in-out"
 		>
-			<Image
-				src={logo}
-				width={width}
-				height={height}
-				alt="Dont Verify Me Logo"
-				style={{ height: "auto" }}
-			/>
+			<LogoDots size={Math.max(width, height)} />
 			<Text
 				fontFamily="$logoFont"
 				fontSize="$6"

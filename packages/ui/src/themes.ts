@@ -85,7 +85,7 @@ const builtThemes = createThemes({
 				...Colors.orangeDark,
 				...darkShadows,
 				shadowColor: darkShadows.shadow1,
-				accent: "#ff6600", // default accent color (blue-500)
+				accent: "#75dd62", // default accent color (blue-500)
 				backgroundStrong: "hsla(23, 39%, 5%, 1.00)", // Adding backgroundStrong
 				backgroundTransparent: "hsla(222, 47%, 11%, 0)",
 				navbarBackground: "rgba(120, 120, 120, 0.2)",
