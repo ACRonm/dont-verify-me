@@ -33,6 +33,7 @@ export * from "./BottomNavBar";
 export * from "./PlatformCard";
 export * from "./PlatformForm";
 export * from "./PublicArticleView";
+export * from "./ArticleEditor";
 
 // TOTP MFA components
 export * from "./TOTPEnrollment";
