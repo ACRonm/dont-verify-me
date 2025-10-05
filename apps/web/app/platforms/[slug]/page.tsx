@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { ThemedPage, PublicArticleView } from "@dont-verify-me/ui";
 import {
 	getPlatformBySlug,
@@ -10,29 +10,34 @@ import {
 import { YStack, Spinner, Text, H1 } from "tamagui";
 import { LandingPageNavbar } from "../../../components/LandingPageNavbar";
 
-export default function PlatformPage({ params }: { params: { slug: string } }) {
+export default function PlatformPage({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	const { slug } = use(params);
 	const [platform, setPlatform] = useState<Platform | null>(null);
 	const [article, setArticle] = useState<Article | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		loadData();
-	}, [params.slug]);
-
-	const loadData = async () => {
-		setLoading(true);
-		try {
-			const data = await getPlatformBySlug(params.slug);
-			if (data) {
-				setPlatform(data);
-				setArticle(data.article || null);
+		const loadData = async () => {
+			setLoading(true);
+			try {
+				const data = await getPlatformBySlug(slug);
+				if (data) {
+					setPlatform(data);
+					setArticle(data.article || null);
+				}
+			} catch (err) {
+				console.error("Failed to load platform:", err);
+			} finally {
+				setLoading(false);
 			}
-		} catch (err) {
-			console.error("Failed to load platform:", err);
-		} finally {
-			setLoading(false);
-		}
-	};
+		};
+
+		loadData();
+	}, [slug]);
 
 	if (loading) {
 		return (

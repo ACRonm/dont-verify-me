@@ -19,7 +19,6 @@ export * from "./StatsGraphCard";
 export * from "./tamagui.config";
 export * from "./ThemedPage";
 export * from "./themes";
-export * from "./StatsGraphCard.Skeleton";
 export * from "./MaintenanceLogTable.Skeleton";
 export * from "./Skeleton";
 export * from "./QuickActions";

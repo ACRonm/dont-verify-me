@@ -26,28 +26,28 @@ export default function EditArticlePage({
 	const router = useRouter();
 
 	useEffect(() => {
-		loadData();
-	}, [slug]);
+		const loadData = async () => {
+			setLoading(true);
+			try {
+				const platformData = await getPlatformBySlugAdmin(slug);
+				if (!platformData) {
+					router.push("/dashboard");
+					return;
+				}
 
-	const loadData = async () => {
-		setLoading(true);
-		try {
-			const platformData = await getPlatformBySlugAdmin(slug);
-			if (!platformData) {
-				router.push("/dashboard");
-				return;
+				setPlatform(platformData);
+
+				const articleData = await getArticleByPlatformId(platformData.id);
+				setArticle(articleData);
+			} catch (err) {
+				console.error("Failed to load data:", err);
+			} finally {
+				setLoading(false);
 			}
+		};
 
-			setPlatform(platformData);
-
-			const articleData = await getArticleByPlatformId(platformData.id);
-			setArticle(articleData);
-		} catch (err) {
-			console.error("Failed to load data:", err);
-		} finally {
-			setLoading(false);
-		}
-	};
+		loadData();
+	}, [slug, router]);
 
 	const handleSave = async (articleData: Partial<Article>) => {
 		if (!platform) return;

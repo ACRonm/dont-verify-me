@@ -22,34 +22,6 @@ export default function LandingPage() {
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
 
-	const handleWaitlistSubmit = async () => {
-		setLoading(true);
-		setError("");
-		setSuccess(false);
-
-		try {
-			const response = await fetch("/api/join-waitlist", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ email }),
-			});
-
-			if (!response.ok) {
-				const { error } = await response.json();
-				throw new Error(error || "Something went wrong");
-			}
-
-			setSuccess(true);
-			setEmail("");
-		} catch (err: any) {
-			setError(err.message);
-		} finally {
-			setLoading(false);
-		}
-	};
-
 	return (
 		<ThemedPage>
 			<LandingPageNavbar />
@@ -73,7 +45,7 @@ export default function LandingPage() {
 				<Text textAlign="center" fontSize="$7" color="$color11" maxWidth={600}>
 					Dont Verify Me is launching soon! Join our waitlist to be the first to
 					access privacy protection resources.
-				</Text>{" "}
+				</Text>
 				<Separator borderColor="$accent" margin="$4" />
 				<Text textAlign="center" fontSize="$7" color="$color11" maxWidth={600}>
 					We are building the best tool to help you keep track of your
@@ -99,7 +71,6 @@ export default function LandingPage() {
 					/>
 					<Button
 						size="$4"
-						onPress={handleWaitlistSubmit}
 						borderWidth={1}
 						borderColor="$accent"
 						backgroundColor="transparent"
