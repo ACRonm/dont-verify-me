@@ -8,11 +8,11 @@ import {
 	getPlatformBySlugAdmin,
 	togglePlatformPublish,
 	type Platform,
-} from './platforms';
-import { supabase } from './supabase';
+} from "./platforms";
+import { supabase } from "./supabase";
 
 // Mock the supabase module
-jest.mock('./supabase', () => ({
+jest.mock("./supabase", () => ({
 	supabase: {
 		auth: {
 			getUser: jest.fn(),
@@ -21,32 +21,32 @@ jest.mock('./supabase', () => ({
 	},
 }));
 
-describe('Platforms API - Authentication Tests', () => {
-	const mockPlatform: Omit<Platform, 'id' | 'created_at' | 'updated_at'> = {
-		slug: 'test-platform',
-		name: 'Test Platform',
-		description: 'Test description',
+describe("Platforms API - Authentication Tests", () => {
+	const mockPlatform: Omit<Platform, "id" | "created_at" | "updated_at"> = {
+		slug: "test-platform",
+		name: "Test Platform",
+		description: "Test description",
 		is_published: false,
 		display_order: 1,
 	};
 
 	const mockPlatformResponse: Platform = {
-		id: 'platform-123',
-		slug: 'test-platform',
-		name: 'Test Platform',
-		description: 'Test description',
+		id: "platform-123",
+		slug: "test-platform",
+		name: "Test Platform",
+		description: "Test description",
 		is_published: false,
 		display_order: 1,
-		created_at: '2025-01-01T00:00:00.000Z',
-		updated_at: '2025-01-01T00:00:00.000Z',
+		created_at: "2025-01-01T00:00:00.000Z",
+		updated_at: "2025-01-01T00:00:00.000Z",
 	};
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
-	describe('CREATE Platform - Authentication Required (via RLS)', () => {
-		it('should create a platform when properly authenticated (RLS enforces)', async () => {
+	describe("CREATE Platform - Authentication Required (via RLS)", () => {
+		it("should create a platform when properly authenticated (RLS enforces)", async () => {
 			const mockSelect = jest.fn().mockReturnValue({
 				single: jest.fn().mockResolvedValue({
 					data: mockPlatformResponse,
@@ -64,13 +64,13 @@ describe('Platforms API - Authentication Tests', () => {
 
 			const result = await createPlatform(mockPlatform);
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
 			expect(mockInsert).toHaveBeenCalledWith(mockPlatform);
 			expect(result).toEqual(mockPlatformResponse);
 		});
 
-		it('should handle RLS policy errors when unauthenticated', async () => {
-			const authError = { message: 'Not authorized', code: '42501' };
+		it("should handle RLS policy errors when unauthenticated", async () => {
+			const authError = { message: "Not authorized", code: "42501" };
 			const mockSelect = jest.fn().mockReturnValue({
 				single: jest.fn().mockResolvedValue({
 					data: null,
@@ -90,9 +90,9 @@ describe('Platforms API - Authentication Tests', () => {
 		});
 	});
 
-	describe('UPDATE Platform - Authentication Required (via RLS)', () => {
-		it('should update a platform when properly authenticated', async () => {
-			const updates = { name: 'Updated Platform' };
+	describe("UPDATE Platform - Authentication Required (via RLS)", () => {
+		it("should update a platform when properly authenticated", async () => {
+			const updates = { name: "Updated Platform" };
 
 			const mockSelect = jest.fn().mockReturnValue({
 				single: jest.fn().mockResolvedValue({
@@ -113,17 +113,17 @@ describe('Platforms API - Authentication Tests', () => {
 				update: mockUpdate,
 			});
 
-			const result = await updatePlatform('platform-123', updates);
+			const result = await updatePlatform("platform-123", updates);
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
 			expect(mockUpdate).toHaveBeenCalledWith(updates);
-			expect(mockEq).toHaveBeenCalledWith('id', 'platform-123');
-			expect(result.name).toBe('Updated Platform');
+			expect(mockEq).toHaveBeenCalledWith("id", "platform-123");
+			expect(result.name).toBe("Updated Platform");
 		});
 
-		it('should handle RLS policy errors when unauthenticated', async () => {
-			const updates = { name: 'Updated Platform' };
-			const authError = { message: 'Not authorized', code: '42501' };
+		it("should handle RLS policy errors when unauthenticated", async () => {
+			const updates = { name: "Updated Platform" };
+			const authError = { message: "Not authorized", code: "42501" };
 
 			const mockSelect = jest.fn().mockReturnValue({
 				single: jest.fn().mockResolvedValue({
@@ -144,12 +144,14 @@ describe('Platforms API - Authentication Tests', () => {
 				update: mockUpdate,
 			});
 
-			await expect(updatePlatform('platform-123', updates)).rejects.toEqual(authError);
+			await expect(updatePlatform("platform-123", updates)).rejects.toEqual(
+				authError
+			);
 		});
 	});
 
-	describe('DELETE Platform - Authentication Required (via RLS)', () => {
-		it('should delete a platform when properly authenticated', async () => {
+	describe("DELETE Platform - Authentication Required (via RLS)", () => {
+		it("should delete a platform when properly authenticated", async () => {
 			const mockEq = jest.fn().mockResolvedValue({
 				error: null,
 			});
@@ -162,15 +164,15 @@ describe('Platforms API - Authentication Tests', () => {
 				delete: mockDelete,
 			});
 
-			await deletePlatform('platform-123');
+			await deletePlatform("platform-123");
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
 			expect(mockDelete).toHaveBeenCalled();
-			expect(mockEq).toHaveBeenCalledWith('id', 'platform-123');
+			expect(mockEq).toHaveBeenCalledWith("id", "platform-123");
 		});
 
-		it('should handle RLS policy errors when unauthenticated', async () => {
-			const authError = { message: 'Not authorized', code: '42501' };
+		it("should handle RLS policy errors when unauthenticated", async () => {
+			const authError = { message: "Not authorized", code: "42501" };
 			const mockEq = jest.fn().mockResolvedValue({
 				error: authError,
 			});
@@ -183,12 +185,12 @@ describe('Platforms API - Authentication Tests', () => {
 				delete: mockDelete,
 			});
 
-			await expect(deletePlatform('platform-123')).rejects.toEqual(authError);
+			await expect(deletePlatform("platform-123")).rejects.toEqual(authError);
 		});
 	});
 
-	describe('VIEW Platforms - No Authentication Required', () => {
-		it('should allow unauthenticated users to get all published platforms', async () => {
+	describe("VIEW Platforms - No Authentication Required", () => {
+		it("should allow unauthenticated users to get all published platforms", async () => {
 			const mockOrder2 = jest.fn().mockResolvedValue({
 				data: [mockPlatformResponse],
 				error: null,
@@ -212,18 +214,18 @@ describe('Platforms API - Authentication Tests', () => {
 
 			const result = await getPublishedPlatforms();
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
 			expect(mockSelect).toHaveBeenCalled();
-			expect(mockEq).toHaveBeenCalledWith('is_published', true);
+			expect(mockEq).toHaveBeenCalledWith("is_published", true);
 			expect(result).toEqual([mockPlatformResponse]);
 			// No authentication check should be made
 			expect(supabase.auth.getUser).not.toHaveBeenCalled();
 		});
 
-		it('should allow unauthenticated users to get platform by slug', async () => {
+		it("should allow unauthenticated users to get platform by slug", async () => {
 			const mockPlatformWithArticle = {
 				...mockPlatformResponse,
-				articles: [{ id: 'article-123', title: 'Test Article' }],
+				articles: [{ id: "article-123", title: "Test Article" }],
 			};
 
 			const mockSingle = jest.fn().mockResolvedValue({
@@ -247,16 +249,16 @@ describe('Platforms API - Authentication Tests', () => {
 				select: mockSelect,
 			});
 
-			const result = await getPlatformBySlug('test-platform');
+			const result = await getPlatformBySlug("test-platform");
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
-			expect(mockEq1).toHaveBeenCalledWith('slug', 'test-platform');
-			expect(mockEq2).toHaveBeenCalledWith('is_published', true);
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
+			expect(mockEq1).toHaveBeenCalledWith("slug", "test-platform");
+			expect(mockEq2).toHaveBeenCalledWith("is_published", true);
 			expect(result).toBeDefined();
 			expect(supabase.auth.getUser).not.toHaveBeenCalled();
 		});
 
-		it('should allow unauthenticated users to view all platforms (admin view requires auth via other means)', async () => {
+		it("should allow unauthenticated users to view all platforms (admin view requires auth via other means)", async () => {
 			const mockOrder2 = jest.fn().mockResolvedValue({
 				data: [mockPlatformResponse],
 				error: null,
@@ -276,15 +278,15 @@ describe('Platforms API - Authentication Tests', () => {
 
 			const result = await getAllPlatforms();
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
 			expect(result).toEqual([mockPlatformResponse]);
 			// Note: The function itself doesn't check auth, but UI/middleware would
 			expect(supabase.auth.getUser).not.toHaveBeenCalled();
 		});
 	});
 
-	describe('TOGGLE Platform Publish - Authentication Required (via RLS)', () => {
-		it('should toggle publish status when authenticated', async () => {
+	describe("TOGGLE Platform Publish - Authentication Required (via RLS)", () => {
+		it("should toggle publish status when authenticated", async () => {
 			// Mock fetching current status
 			const mockSingleForFetch = jest.fn().mockResolvedValue({
 				data: { is_published: false },
@@ -328,15 +330,18 @@ describe('Platforms API - Authentication Tests', () => {
 				}
 			});
 
-			const result = await togglePlatformPublish('platform-123');
+			const result = await togglePlatformPublish("platform-123");
 
 			expect(result.is_published).toBe(true);
 		});
 	});
 
-	describe('Admin Platform View - Protected Route (not API level)', () => {
-		it('should allow fetching unpublished platforms via admin endpoint', async () => {
-			const unpublishedPlatform = { ...mockPlatformResponse, is_published: false };
+	describe("Admin Platform View - Protected Route (not API level)", () => {
+		it("should allow fetching unpublished platforms via admin endpoint", async () => {
+			const unpublishedPlatform = {
+				...mockPlatformResponse,
+				is_published: false,
+			};
 			const mockPlatformWithArticle = {
 				...unpublishedPlatform,
 				articles: [],
@@ -359,10 +364,10 @@ describe('Platforms API - Authentication Tests', () => {
 				select: mockSelect,
 			});
 
-			const result = await getPlatformBySlugAdmin('test-platform');
+			const result = await getPlatformBySlugAdmin("test-platform");
 
-			expect(supabase.from).toHaveBeenCalledWith('platforms');
-			expect(mockEq).toHaveBeenCalledWith('slug', 'test-platform');
+			expect(supabase.from).toHaveBeenCalledWith("platforms");
+			expect(mockEq).toHaveBeenCalledWith("slug", "test-platform");
 			expect(result).toBeDefined();
 			// Note: Auth is handled at route/middleware level, not in this function
 			expect(supabase.auth.getUser).not.toHaveBeenCalled();

@@ -4,21 +4,21 @@ Dont Verify Me is a platform that collates ways to bypass Australian social medi
 
 ## Core Features
 
-*   **Privacy Resources:** Curated collection of methods and tools to maintain online privacy
-*   **Age Verification Bypass:** Documentation of legitimate ways to protect your identity online
-*   **Privacy Education:** Learn about your digital rights and privacy protection strategies
-*   **Community-Driven:** Contribute to and benefit from community-sourced privacy protection methods
+- **Privacy Resources:** Curated collection of methods and tools to maintain online privacy
+- **Age Verification Bypass:** Documentation of legitimate ways to protect your identity online
+- **Privacy Education:** Learn about your digital rights and privacy protection strategies
+- **Community-Driven:** Contribute to and benefit from community-sourced privacy protection methods
 
 ## Table of Contents
 
-*   [Getting Started](#getting-started)
-*   [Development Workflow](#development-workflow)
-*   [API Documentation](#api-documentation)
-*   [Deployment](#deployment)
-*   [Contributing](#contributing)
-*   [Project Architecture](#project-architecture)
-*   [Troubleshooting](#troubleshooting)
-*   [Screenshots/Demos](#screenshotsdemos)
+- [Getting Started](#getting-started)
+- [Development Workflow](#development-workflow)
+- [API Documentation](#api-documentation)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [Project Architecture](#project-architecture)
+- [Troubleshooting](#troubleshooting)
+- [Screenshots/Demos](#screenshotsdemos)
 
 ## Getting Started
 
@@ -26,8 +26,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-*   Node.js (v18 or higher)
-*   npm
+- Node.js (v18 or higher)
+- npm
 
 ### Installation
 
@@ -92,8 +92,8 @@ Please open an issue and describe the feature you would like to see.
 
 This project is a monorepo with the following structure:
 
-*   `apps`: Contains the web and mobile applications.
-*   `packages`: Contains shared packages, such as UI components and logic.
+- `apps`: Contains the web and mobile applications.
+- `packages`: Contains shared packages, such as UI components and logic.
 
 ### Database Schema
 
@@ -105,9 +105,9 @@ The UI is built with [Tamagui](https://tamagui.dev/), a cross-platform UI toolki
 
 ## Troubleshooting
 
-*   **Problem:** The app is not running after `npm run dev:web`.
-*   **Solution:** Make sure you have Node.js v18 or higher installed. You can check your Node.js version with `node -v`.
+- **Problem:** The app is not running after `npm run dev:web`.
+- **Solution:** Make sure you have Node.js v18 or higher installed. You can check your Node.js version with `node -v`.
 
 ## Screenshots/Demos
 
-*Coming soon...*
+_Coming soon..._

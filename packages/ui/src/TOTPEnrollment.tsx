@@ -1,14 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-	YStack,
-	XStack,
-	Text,
-	Input,
-	Button,
-	Spinner,
-} from "tamagui";
+import { YStack, XStack, Text, Input, Button, Spinner } from "tamagui";
 
 interface TOTPEnrollmentProps {
 	onEnrolled: () => void;
@@ -45,23 +38,25 @@ export function TOTPEnrollment({
 
 	useEffect(() => {
 		let isSubscribed = true;
-		
+
 		(async () => {
 			try {
 				console.log("Starting MFA enrollment...");
 				const data = await enrollFunction();
-				
+
 				console.log("Enrollment API call completed");
-				
+
 				if (!isSubscribed) {
-					console.log("Component unmounted before enrollment data could be set");
+					console.log(
+						"Component unmounted before enrollment data could be set"
+					);
 					return;
 				}
-				
-				console.log("Enrollment data received:", { 
-					hasId: !!data.id, 
+
+				console.log("Enrollment data received:", {
+					hasId: !!data.id,
 					hasQRCode: !!data.totp?.qr_code,
-					hasSecret: !!data.totp?.secret 
+					hasSecret: !!data.totp?.secret,
 				});
 				setFactorId(data.id);
 				setQRCode(data.totp.qr_code);
@@ -80,7 +75,7 @@ export function TOTPEnrollment({
 				}
 			}
 		})();
-		
+
 		return () => {
 			console.log("TOTPEnrollment useEffect cleanup");
 			isSubscribed = false;
@@ -93,9 +88,15 @@ export function TOTPEnrollment({
 		return () => {
 			// On unmount, if we have a factorId and it's not verified, clean it up
 			if (factorId && !isVerified) {
-				console.log("Component unmounting, cleaning up unverified factor:", factorId);
+				console.log(
+					"Component unmounting, cleaning up unverified factor:",
+					factorId
+				);
 				unenrollFunction(factorId).catch((error) => {
-					console.error("Failed to cleanup unverified factor on unmount:", error);
+					console.error(
+						"Failed to cleanup unverified factor on unmount:",
+						error
+					);
 				});
 			}
 		};
@@ -145,7 +146,7 @@ export function TOTPEnrollment({
 			</YStack>
 		);
 	}
-	
+
 	// If we have QR code data but loading is still true, force it to display
 	if (loading && qrCode) {
 		console.warn("Loading is true but QR code exists - displaying anyway");
@@ -157,13 +158,20 @@ export function TOTPEnrollment({
 				<Text fontSize={20} fontWeight="bold" textAlign="center">
 					Set Up Two-Factor Authentication
 				</Text>
-				
+
 				<Text fontSize={14} color="$color11" textAlign="center">
-					Scan this QR code with your authenticator app (like Google Authenticator, Authy, or 1Password)
+					Scan this QR code with your authenticator app (like Google
+					Authenticator, Authy, or 1Password)
 				</Text>
 
 				{qrCode ? (
-					<YStack alignItems="center" gap="$3" padding="$4" backgroundColor="$background" borderRadius="$4">
+					<YStack
+						alignItems="center"
+						gap="$3"
+						padding="$4"
+						backgroundColor="$background"
+						borderRadius="$4"
+					>
 						<YStack
 							width={250}
 							height={250}
@@ -174,7 +182,13 @@ export function TOTPEnrollment({
 						<Text fontSize={12} color="$color11" textAlign="center">
 							Can't scan? Manual entry code:
 						</Text>
-						<Text fontSize={11} fontFamily="$mono" color="$color10" textAlign="center" selectable>
+						<Text
+							fontSize={11}
+							fontFamily="$mono"
+							color="$color10"
+							textAlign="center"
+							selectable
+						>
 							{secret}
 						</Text>
 					</YStack>
@@ -189,7 +203,12 @@ export function TOTPEnrollment({
 						Enter the 6-digit code from your app
 					</Text>
 					<YStack width="100%" position="relative">
-						<XStack gap="$2" justifyContent="center" width="100%" pointerEvents="none">
+						<XStack
+							gap="$2"
+							justifyContent="center"
+							width="100%"
+							pointerEvents="none"
+						>
 							{[0, 1, 2, 3, 4, 5].map((index) => {
 								return (
 									<YStack

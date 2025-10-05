@@ -15,7 +15,13 @@ export function PublicArticleView({
 }: PublicArticleViewProps) {
 	return (
 		<ScrollView flex={1}>
-			<YStack padding="$6" gap="$4" maxWidth={800} alignSelf="center" width="100%">
+			<YStack
+				padding="$6"
+				gap="$4"
+				maxWidth={800}
+				alignSelf="center"
+				width="100%"
+			>
 				<YStack gap="$2">
 					<Text fontSize="$3" color="$color11" textTransform="uppercase">
 						{platform.name}
@@ -42,14 +48,14 @@ export function PublicArticleView({
 							color: "inherit",
 						}}
 					/>
+				</YStack>
+
+				<Separator marginTop="$6" />
+
+				<Text fontSize="$2" color="$color10" textAlign="center">
+					Last updated: {new Date(article.updated_at).toLocaleDateString()}
+				</Text>
 			</YStack>
-
-			<Separator marginTop="$6" />
-
-			<Text fontSize="$2" color="$color10" textAlign="center">
-				Last updated: {new Date(article.updated_at).toLocaleDateString()}
-			</Text>
-		</YStack>
-	</ScrollView>
-);
+		</ScrollView>
+	);
 }

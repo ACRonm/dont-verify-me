@@ -9,45 +9,45 @@ const tsParser = require("@typescript-eslint/parser");
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
 module.exports = [
-  // Base configurations
-  {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      globals: {
-        React: "readonly",
-      },
-    },
-    plugins: {
-      react: reactPlugin,
-      "react-hooks": hooksPlugin,
-      "@next/next": nextPlugin,
-    },
-    rules: {
-      ...reactPlugin.configs.recommended.rules,
-      ...hooksPlugin.configs.recommended.rules,
-      ...nextPlugin.configs.recommended.rules,
-      ...nextPlugin.configs["core-web-vitals"].rules,
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
-  },
-  // Prettier configuration (must be last)
-  {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      "prettier/prettier": "error",
-    },
-  },
+	// Base configurations
+	{
+		files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+		languageOptions: {
+			parser: tsParser,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+				},
+			},
+			globals: {
+				React: "readonly",
+			},
+		},
+		plugins: {
+			react: reactPlugin,
+			"react-hooks": hooksPlugin,
+			"@next/next": nextPlugin,
+		},
+		rules: {
+			...reactPlugin.configs.recommended.rules,
+			...hooksPlugin.configs.recommended.rules,
+			...nextPlugin.configs.recommended.rules,
+			...nextPlugin.configs["core-web-vitals"].rules,
+		},
+		settings: {
+			react: {
+				version: "detect",
+			},
+		},
+	},
+	// Prettier configuration (must be last)
+	{
+		files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+		plugins: {
+			prettier: prettierPlugin,
+		},
+		rules: {
+			"prettier/prettier": "error",
+		},
+	},
 ];

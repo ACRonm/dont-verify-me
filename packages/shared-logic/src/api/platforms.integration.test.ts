@@ -1,41 +1,41 @@
 /**
  * Integration tests for Platforms API - Tests ACTUAL RLS policies in Supabase
- * 
+ *
  * These tests verify that unauthenticated users:
  * 1. CANNOT create, update, or delete platforms (RLS blocks them)
  * 2. CAN view published platforms (read access is public)
  */
 
-import { createClient } from '@supabase/supabase-js';
-import * as dotenv from 'dotenv';
-import { resolve } from 'path';
+import { createClient } from "@supabase/supabase-js";
+import * as dotenv from "dotenv";
+import { resolve } from "path";
 
 // Load environment variables from apps/web/.env.local
-dotenv.config({ path: resolve(__dirname, '../../../../apps/web/.env.local') });
+dotenv.config({ path: resolve(__dirname, "../../../../apps/web/.env.local") });
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-	throw new Error('Missing Supabase credentials in .env.local');
+	throw new Error("Missing Supabase credentials in .env.local");
 }
 
-describe('Platforms API - RLS Integration Tests (Unauthenticated Users)', () => {
+describe("Platforms API - RLS Integration Tests (Unauthenticated Users)", () => {
 	let unauthenticatedClient: ReturnType<typeof createClient>;
-	const fakePlatformId = '00000000-0000-0000-0000-000000000000'; // UUID that doesn't exist
+	const fakePlatformId = "00000000-0000-0000-0000-000000000000"; // UUID that doesn't exist
 
 	beforeAll(() => {
 		// Create unauthenticated client (no sign in)
 		unauthenticatedClient = createClient(supabaseUrl, supabaseAnonKey);
 	});
 
-	describe('CREATE Platform - Should be BLOCKED by RLS', () => {
-		it('should PREVENT unauthenticated users from creating platforms', async () => {
+	describe("CREATE Platform - Should be BLOCKED by RLS", () => {
+		it("should PREVENT unauthenticated users from creating platforms", async () => {
 			const { data, error } = await unauthenticatedClient
-				.from('platforms')
+				.from("platforms")
 				.insert({
 					slug: `unauthorized-platform-${Date.now()}`,
-					name: 'Unauthorized Platform',
+					name: "Unauthorized Platform",
 					is_published: false,
 					display_order: 999,
 				} as any)
@@ -44,31 +44,31 @@ describe('Platforms API - RLS Integration Tests (Unauthenticated Users)', () => 
 
 			// RLS should block this operation
 			expect(error).toBeDefined();
-			expect(error?.code).toBe('42501'); // PostgreSQL insufficient privilege error
+			expect(error?.code).toBe("42501"); // PostgreSQL insufficient privilege error
 			expect(data).toBeNull();
 		});
 	});
 
-	describe('READ Platform - Should be ALLOWED', () => {
-		it('should ALLOW unauthenticated users to query platforms table', async () => {
+	describe("READ Platform - Should be ALLOWED", () => {
+		it("should ALLOW unauthenticated users to query platforms table", async () => {
 			// This should work (even if no results), RLS allows SELECT
 			const { error } = await unauthenticatedClient
-				.from('platforms')
-				.select('*')
-				.eq('is_published', true)
+				.from("platforms")
+				.select("*")
+				.eq("is_published", true)
 				.limit(1);
 
 			// Should not have a permission error
-			expect(error?.code).not.toBe('42501');
+			expect(error?.code).not.toBe("42501");
 		});
 	});
 
-	describe('UPDATE Platform - Should be BLOCKED by RLS', () => {
-		it('should PREVENT unauthenticated users from updating platforms', async () => {
+	describe("UPDATE Platform - Should be BLOCKED by RLS", () => {
+		it("should PREVENT unauthenticated users from updating platforms", async () => {
 			const { data, error } = await unauthenticatedClient
-				.from('platforms')
-				.update({ name: 'Unauthorized Update' } as any)
-				.eq('id', fakePlatformId)
+				.from("platforms")
+				.update({ name: "Unauthorized Update" } as any)
+				.eq("id", fakePlatformId)
 				.select()
 				.single();
 
@@ -77,17 +77,17 @@ describe('Platforms API - RLS Integration Tests (Unauthenticated Users)', () => 
 			// 2. But RLS filters out all rows the user can't modify
 			// 3. Result: "no rows found" rather than explicit permission error
 			expect(error).toBeDefined();
-			expect(error?.code).toBe('PGRST116'); // No rows found (RLS filtered them out)
+			expect(error?.code).toBe("PGRST116"); // No rows found (RLS filtered them out)
 			expect(data).toBeNull();
 		});
 	});
 
-	describe('DELETE Platform - Should be BLOCKED by RLS', () => {
-		it('should PREVENT unauthenticated users from deleting platforms', async () => {
+	describe("DELETE Platform - Should be BLOCKED by RLS", () => {
+		it("should PREVENT unauthenticated users from deleting platforms", async () => {
 			const { error } = await unauthenticatedClient
-				.from('platforms')
+				.from("platforms")
 				.delete()
-				.eq('id', fakePlatformId);
+				.eq("id", fakePlatformId);
 
 			// RLS should block this operation - no error returned but no rows affected
 			// This is expected: DELETE with RLS silently fails (returns no error but deletes 0 rows)

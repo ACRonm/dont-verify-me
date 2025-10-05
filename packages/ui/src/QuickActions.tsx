@@ -73,11 +73,7 @@ export function QuickActions({}: {}) {
 						<Button icon={PlusCircle} flex={1} theme="active" size="$4">
 							<Text>Log Tire Change</Text>
 						</Button>
-						<Button
-							icon={Replace}
-							flex={1}
-							size="$4"
-						>
+						<Button icon={Replace} flex={1} size="$4">
 							<Text>Replace Tire Set</Text>
 						</Button>
 						<Button icon={Wrench} flex={1} size="$4">

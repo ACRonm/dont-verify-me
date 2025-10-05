@@ -56,7 +56,9 @@ export function MFASettings() {
 			await loadFactors();
 		} catch (error) {
 			console.error("Failed to remove factor:", error);
-			setError(error instanceof Error ? error.message : "Failed to remove factor");
+			setError(
+				error instanceof Error ? error.message : "Failed to remove factor"
+			);
 		} finally {
 			setRemoving(null);
 		}
@@ -82,9 +84,11 @@ export function MFASettings() {
 			const unverifiedFactors = allFactors.filter(
 				(factor) => factor.status === "unverified"
 			);
-			
-			console.log(`Cleaning up ${unverifiedFactors.length} unverified factors...`);
-			
+
+			console.log(
+				`Cleaning up ${unverifiedFactors.length} unverified factors...`
+			);
+
 			for (const factor of unverifiedFactors) {
 				try {
 					await mfa.unenroll(factor.id);
@@ -93,7 +97,7 @@ export function MFASettings() {
 					console.error("Failed to remove unverified factor:", error);
 				}
 			}
-			
+
 			await loadFactors();
 		} catch (error) {
 			console.error("Failed to cleanup unverified factors:", error);
@@ -106,7 +110,7 @@ export function MFASettings() {
 	const handleStartEnrollment = async () => {
 		// Clear any previous errors
 		setError("");
-		
+
 		// Check for any unverified factors and remove them first
 		try {
 			const data = await mfa.listFactors();
@@ -117,19 +121,21 @@ export function MFASettings() {
 			const unverifiedFactors = allFactors.filter(
 				(factor) => factor.status === "unverified"
 			);
-			
+
 			console.log("Pre-enrollment cleanup:", {
 				total: allFactors.length,
 				verified: verifiedFactors.length,
 				unverified: unverifiedFactors.length,
 			});
-			
+
 			// Check if user has reached the maximum number of factors
 			if (verifiedFactors.length >= 10) {
-				setError("You have reached the maximum number of authentication factors (10). Please remove an existing factor before adding a new one.");
+				setError(
+					"You have reached the maximum number of authentication factors (10). Please remove an existing factor before adding a new one."
+				);
 				return;
 			}
-			
+
 			// Remove unverified factors before starting new enrollment
 			for (const factor of unverifiedFactors) {
 				try {
@@ -139,7 +145,7 @@ export function MFASettings() {
 					console.error("Failed to remove unverified factor:", error);
 				}
 			}
-			
+
 			// Reload factors after cleanup
 			await loadFactors();
 		} catch (error) {
@@ -147,7 +153,7 @@ export function MFASettings() {
 			setError("Failed to prepare for enrollment. Please try again.");
 			return;
 		}
-		
+
 		setShowEnrollment(true);
 	};
 
@@ -175,7 +181,12 @@ export function MFASettings() {
 			<Separator />
 
 			{error ? (
-				<Card padding="$3" backgroundColor="$red2" borderColor="$red7" borderWidth={1}>
+				<Card
+					padding="$3"
+					backgroundColor="$red2"
+					borderColor="$red7"
+					borderWidth={1}
+				>
 					<Text fontSize={14} color="$red11">
 						{error}
 					</Text>
@@ -188,11 +199,7 @@ export function MFASettings() {
 						<Text fontSize={14} textAlign="center">
 							You don't have any authentication factors set up yet.
 						</Text>
-						<Button
-							size="$3"
-							theme="active"
-							onPress={handleStartEnrollment}
-						>
+						<Button size="$3" theme="active" onPress={handleStartEnrollment}>
 							Enable Two-Factor Authentication
 						</Button>
 					</YStack>
@@ -200,11 +207,18 @@ export function MFASettings() {
 			) : (
 				<YStack gap="$3">
 					{factors.filter((f) => f.status === "unverified").length > 0 && (
-						<Card padding="$3" backgroundColor="$yellow2" borderColor="$yellow7" borderWidth={1}>
+						<Card
+							padding="$3"
+							backgroundColor="$yellow2"
+							borderColor="$yellow7"
+							borderWidth={1}
+						>
 							<YStack gap="$2">
 								<Text fontSize={14} color="$yellow11">
-									You have {factors.filter((f) => f.status === "unverified").length} unverified factor(s). 
-									These are incomplete enrollments that should be cleaned up.
+									You have{" "}
+									{factors.filter((f) => f.status === "unverified").length}{" "}
+									unverified factor(s). These are incomplete enrollments that
+									should be cleaned up.
 								</Text>
 								<Button
 									size="$2"
@@ -227,7 +241,14 @@ export function MFASettings() {
 											{factor.friendly_name || "Authenticator App"}
 										</Text>
 										{factor.status === "unverified" && (
-											<Text fontSize={11} color="$yellow10" backgroundColor="$yellow4" paddingHorizontal="$2" paddingVertical="$1" borderRadius="$2">
+											<Text
+												fontSize={11}
+												color="$yellow10"
+												backgroundColor="$yellow4"
+												paddingHorizontal="$2"
+												paddingVertical="$1"
+												borderRadius="$2"
+											>
 												UNVERIFIED
 											</Text>
 										)}
@@ -248,11 +269,7 @@ export function MFASettings() {
 							</XStack>
 						</Card>
 					))}
-					<Button
-						size="$3"
-						variant="outlined"
-						onPress={handleStartEnrollment}
-					>
+					<Button size="$3" variant="outlined" onPress={handleStartEnrollment}>
 						Add Another Factor
 					</Button>
 				</YStack>

@@ -1,110 +1,112 @@
-import { renderHook, waitFor, act } from '@testing-library/react';
-import { useAuth } from './useAuth';
-import { supabase } from '../api/supabase';
-import { useToastController } from '@tamagui/toast';
-import { useRouter } from 'next/navigation';
+import { renderHook, waitFor, act } from "@testing-library/react";
+import { useAuth } from "./useAuth";
+import { supabase } from "../api/supabase";
+import { useToastController } from "@tamagui/toast";
+import { useRouter } from "next/navigation";
 
 // Mock Supabase
-jest.mock('../api/supabase', () => ({
-  supabase: {
-    auth: {
-      getSession: jest.fn(),
-      onAuthStateChange: jest.fn(() => ({ data: { subscription: { unsubscribe: jest.fn() } } })),
-      signInWithOAuth: jest.fn(),
-      signInWithPassword: jest.fn(),
-      signUp: jest.fn(),
-      signOut: jest.fn(),
-    },
-  },
+jest.mock("../api/supabase", () => ({
+	supabase: {
+		auth: {
+			getSession: jest.fn(),
+			onAuthStateChange: jest.fn(() => ({
+				data: { subscription: { unsubscribe: jest.fn() } },
+			})),
+			signInWithOAuth: jest.fn(),
+			signInWithPassword: jest.fn(),
+			signUp: jest.fn(),
+			signOut: jest.fn(),
+		},
+	},
 }));
 
 // Mock Tamagui toast
 const mockToastController = {
-  show: jest.fn(),
+	show: jest.fn(),
 };
 
-jest.mock('@tamagui/toast', () => ({
-  useToastController: jest.fn(() => mockToastController),
+jest.mock("@tamagui/toast", () => ({
+	useToastController: jest.fn(() => mockToastController),
 }));
 
 // Mock Next.js router
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(() => ({
-    refresh: jest.fn(),
-  })),
+jest.mock("next/navigation", () => ({
+	useRouter: jest.fn(() => ({
+		refresh: jest.fn(),
+	})),
 }));
 
-describe('useAuth', () => {
-  beforeEach(() => {
-    // Reset mocks before each test
-    jest.clearAllMocks();
-    // Mock getSession to return no session by default for initial render
-    (supabase.auth.getSession as jest.Mock).mockResolvedValue({
-      data: { session: null },
-      error: null,
-    });
-  });
+describe("useAuth", () => {
+	beforeEach(() => {
+		// Reset mocks before each test
+		jest.clearAllMocks();
+		// Mock getSession to return no session by default for initial render
+		(supabase.auth.getSession as jest.Mock).mockResolvedValue({
+			data: { session: null },
+			error: null,
+		});
+	});
 
-  it('should initialize with loading true and fetch session on mount', async () => {
-    // Mock getSession to return no session
-    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
-      data: { session: null },
-      error: null,
-    });
+	it("should initialize with loading true and fetch session on mount", async () => {
+		// Mock getSession to return no session
+		(supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+			data: { session: null },
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    // Initially, loading should be true
-    expect(result.current.loading).toBe(true);
-    expect(result.current.session).toBeNull();
-    expect(result.current.user).toBeNull();
+		// Initially, loading should be true
+		expect(result.current.loading).toBe(true);
+		expect(result.current.session).toBeNull();
+		expect(result.current.user).toBeNull();
 
-    // Wait for the async effect to complete
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
+		// Wait for the async effect to complete
+		await waitFor(() => {
+			expect(result.current.loading).toBe(false);
+		});
 
-    // After loading, session and user should still be null as per mock
-    expect(result.current.session).toBeNull();
-    expect(result.current.user).toBeNull();
-    expect(supabase.auth.getSession).toHaveBeenCalledTimes(1);
-  });
+		// After loading, session and user should still be null as per mock
+		expect(result.current.session).toBeNull();
+		expect(result.current.user).toBeNull();
+		expect(supabase.auth.getSession).toHaveBeenCalledTimes(1);
+	});
 
-  it('should update session and user if getSession returns a session', async () => {
-    const mockSession = {
-      access_token: 'mock_access_token',
-      token_type: 'Bearer',
-      expires_in: 3600,
-      expires_at: Date.now() / 1000 + 3600,
-      refresh_token: 'mock_refresh_token',
-      user: {
-        id: 'mock_user_id',
-        aud: 'authenticated',
-        email: 'test@example.com',
-        app_metadata: {},
-        user_metadata: {},
-        created_at: new Date().toISOString(),
-        identities: [],
-      },
-    };
+	it("should update session and user if getSession returns a session", async () => {
+		const mockSession = {
+			access_token: "mock_access_token",
+			token_type: "Bearer",
+			expires_in: 3600,
+			expires_at: Date.now() / 1000 + 3600,
+			refresh_token: "mock_refresh_token",
+			user: {
+				id: "mock_user_id",
+				aud: "authenticated",
+				email: "test@example.com",
+				app_metadata: {},
+				user_metadata: {},
+				created_at: new Date().toISOString(),
+				identities: [],
+			},
+		};
 
-    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
-      data: { session: mockSession },
-      error: null,
-    });
+		(supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+			data: { session: mockSession },
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
+		await waitFor(() => {
+			expect(result.current.loading).toBe(false);
+		});
 
-    expect(result.current.session).toEqual(mockSession);
-    expect(result.current.user).toEqual(mockSession.user);
-    expect(supabase.auth.getSession).toHaveBeenCalledTimes(1);
-  });
+		expect(result.current.session).toEqual(mockSession);
+		expect(result.current.user).toEqual(mockSession.user);
+		expect(supabase.auth.getSession).toHaveBeenCalledTimes(1);
+	});
 
-  it("should handle successful signInWithEmail", async () => {
+	it("should handle successful signInWithEmail", async () => {
 		const mockUser = {
 			id: "user123",
 			email: "test@example.com",
@@ -328,96 +330,96 @@ describe('useAuth', () => {
 		});
 	});
 
-  it('should handle signUpWithEmail error', async () => {
-    const mockError = new Error('User already exists');
-    (supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
-      data: { user: null, session: null },
-      error: mockError,
-    });
+	it("should handle signUpWithEmail error", async () => {
+		const mockError = new Error("User already exists");
+		(supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
+			data: { user: null, session: null },
+			error: mockError,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    const email = 'existing@example.com';
-    const password = 'password123';
-    let signUpPromise: Promise<any>;
+		const email = "existing@example.com";
+		const password = "password123";
+		let signUpPromise: Promise<any>;
 
-    act(() => {
-      signUpPromise = result.current.signUpWithEmail(email, password);
-    });
+		act(() => {
+			signUpPromise = result.current.signUpWithEmail(email, password);
+		});
 
-    expect(result.current.signUpLoading).toBe(true);
+		expect(result.current.signUpLoading).toBe(true);
 
-    let signUpResult;
+		let signUpResult;
 		await act(async () => {
 			signUpResult = await signUpPromise;
 		});
 
-    expect(result.current.signUpLoading).toBe(false);
+		expect(result.current.signUpLoading).toBe(false);
 
-    expect(supabase.auth.signUp).toHaveBeenCalledWith({
-      email,
-      password,
-    });
+		expect(supabase.auth.signUp).toHaveBeenCalledWith({
+			email,
+			password,
+		});
 
-    expect(mockToastController.show).toHaveBeenCalledWith('Signup Failed', {
-      type: 'error',
-    });
+		expect(mockToastController.show).toHaveBeenCalledWith("Signup Failed", {
+			type: "error",
+		});
 
-    expect(signUpResult).toEqual({
+		expect(signUpResult).toEqual({
 			success: false,
 			message: mockError.message,
 		});
-  });
+	});
 
-  it('should handle signInWithOAuth (Google)', async () => {
-    (supabase.auth.signInWithOAuth as jest.Mock).mockResolvedValueOnce({
-      data: { provider: null, url: null },
-      error: null,
-    });
+	it("should handle signInWithOAuth (Google)", async () => {
+		(supabase.auth.signInWithOAuth as jest.Mock).mockResolvedValueOnce({
+			data: { provider: null, url: null },
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    act(() => {
-      result.current.signInWithGoogle();
-    });
+		act(() => {
+			result.current.signInWithGoogle();
+		});
 
-    expect(result.current.signInLoading).toBe(true);
+		expect(result.current.signInLoading).toBe(true);
 
-    await waitFor(() => {
-      expect(result.current.signInLoading).toBe(false);
-    });
+		await waitFor(() => {
+			expect(result.current.signInLoading).toBe(false);
+		});
 
-    expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
-      provider: "google",
-      options: {
-        redirectTo: "http://localhost/dashboard",
-      }
-    });
-  });
+		expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
+			provider: "google",
+			options: {
+				redirectTo: "http://localhost/dashboard",
+			},
+		});
+	});
 
-  it('should handle signOut', async () => {
-    (supabase.auth.signOut as jest.Mock).mockResolvedValueOnce({
-      error: null,
-    });
+	it("should handle signOut", async () => {
+		(supabase.auth.signOut as jest.Mock).mockResolvedValueOnce({
+			error: null,
+		});
 
-    const { result } = renderHook(() => useAuth());
+		const { result } = renderHook(() => useAuth());
 
-    await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
-    act(() => {
-      result.current.signOut();
-    });
+		act(() => {
+			result.current.signOut();
+		});
 
-    expect(result.current.signOutLoading).toBe(true);
+		expect(result.current.signOutLoading).toBe(true);
 
-    await waitFor(() => {
-      expect(result.current.signOutLoading).toBe(false);
-    });
+		await waitFor(() => {
+			expect(result.current.signOutLoading).toBe(false);
+		});
 
-    expect(supabase.auth.signOut).toHaveBeenCalledTimes(1);
-  });
+		expect(supabase.auth.signOut).toHaveBeenCalledTimes(1);
+	});
 });

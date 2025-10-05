@@ -56,11 +56,15 @@ export function PlatformForm({
 	};
 
 	return (
-		<YStack gap="$4" padding="$4" backgroundColor="$background" borderRadius="$4">
+		<YStack
+			gap="$4"
+			padding="$4"
+			backgroundColor="$background"
+			borderRadius="$4"
+		>
 			<Text fontSize="$6" fontWeight="bold">
 				{initialData?.id ? "Edit" : "Create"} Platform
 			</Text>
-
 			<YStack gap="$2">
 				<Label htmlFor="name">Platform Name</Label>
 				<Input
@@ -71,20 +75,20 @@ export function PlatformForm({
 					placeholder="e.g., Reddit"
 				/>
 			</YStack>
-
 			<YStack gap="$2">
 				<Label htmlFor="slug">URL Slug</Label>
 				<Input
 					id="slug"
 					size="$4"
-				value={slug}
-				onChangeText={setSlug}
-				placeholder="e.g., reddit"
-			/>
-			<Text fontSize="$2" color="$color10">
-				Will be used in URL: /platforms/{slug}
-			</Text>
-		</YStack>			<YStack gap="$2">
+					value={slug}
+					onChangeText={setSlug}
+					placeholder="e.g., reddit"
+				/>
+				<Text fontSize="$2" color="$color10">
+					Will be used in URL: /platforms/{slug}
+				</Text>
+			</YStack>{" "}
+			<YStack gap="$2">
 				<Label htmlFor="description">Description (Optional)</Label>
 				<TextArea
 					id="description"
@@ -95,13 +99,11 @@ export function PlatformForm({
 					numberOfLines={3}
 				/>
 			</YStack>
-
 			{error && (
 				<Text color="$red10" fontSize="$3">
 					{error}
 				</Text>
 			)}
-
 			<XStack gap="$3" justifyContent="flex-end">
 				<Button onPress={onCancel} theme="gray" disabled={loading}>
 					Cancel
