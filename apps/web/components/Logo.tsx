@@ -34,6 +34,7 @@ export function Logo({ width = 35, height = 32, docked }: LogoProps) {
 				width={width}
 				height={height}
 				alt="Dont Verify Me Logo"
+				style={{ height: "auto" }}
 			/>
 			<Text
 				fontFamily="$logoFont"

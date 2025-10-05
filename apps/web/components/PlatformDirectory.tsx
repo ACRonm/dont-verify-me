@@ -65,9 +65,6 @@ export function PlatformDirectory({
 				gap="$4"
 				maxWidth={600}
 			>
-				<Text fontSize="$9" fontWeight="bold">
-					📚
-				</Text>
 				<Text fontSize="$6" fontWeight="600" color="$color">
 					No Privacy Guides Yet
 				</Text>

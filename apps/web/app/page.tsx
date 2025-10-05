@@ -68,7 +68,6 @@ export default function HomePage() {
 				</Text>
 			</YStack>
 
-			{/* Platform Directory Section */}
 			<YStack
 				paddingHorizontal="$6"
 				paddingVertical="$8"

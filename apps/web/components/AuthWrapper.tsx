@@ -19,7 +19,10 @@ export default function AuthWrapper({
 	}
 
 	const isPublicRoute =
-		pathname === "/login" || pathname === "/signup" || pathname === "/";
+		pathname === "/login" ||
+		pathname === "/signup" ||
+		pathname === "/" ||
+		pathname === "/privacy";
 	if (isPublicRoute) {
 		return <>{children}</>;
 	}
