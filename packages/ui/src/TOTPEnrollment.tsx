@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { YStack, XStack, Text, Input, Button, Spinner color="$accent" } from "tamagui";
+import { YStack, XStack, Text, Input, Button, Spinner } from "tamagui";
 
 interface TOTPEnrollmentProps {
 	onEnrolled: () => void;
