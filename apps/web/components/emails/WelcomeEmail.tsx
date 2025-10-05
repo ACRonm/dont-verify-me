@@ -66,7 +66,7 @@ export function WelcomeEmail({ email }: Readonly<WelcomeEmailProps>) {
 						Australian social media age verification to maintain your privacy.
 						You&apos;ll be the first to know when we launch.
 					</Text>
-					<Button style={btn} href="https://dontverifyme.app">
+					<Button style={btn} href="https://dontverify.me">
 						Visit our Website
 					</Button>
 					<Text style={{ ...text, marginTop: "24px" }}>
