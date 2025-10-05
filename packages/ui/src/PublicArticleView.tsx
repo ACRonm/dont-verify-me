@@ -1,6 +1,14 @@
 "use client";
 
-import { YStack, H1, Text, Separator, ScrollView } from "tamagui";
+import {
+	YStack,
+	XStack,
+	H1,
+	Text,
+	Separator,
+	ScrollView,
+	Image,
+} from "tamagui";
 import type { Article, Platform } from "@dont-verify-me/shared-logic";
 import { ShareArticle } from "./ShareArticle";
 import "./editor-styles.css";
@@ -16,12 +24,14 @@ export function PublicArticleView({
 	platform,
 	shareUrl,
 }: PublicArticleViewProps) {
-	// Generate the share URL if not provided
 	const url =
 		shareUrl || (typeof window !== "undefined" ? window.location.href : "");
 
+	// Use icon_url from database, or fallback to local icon based on slug
+	const iconUrl = platform.icon_url || `/icons/platforms/${platform.slug}.svg`;
+
 	return (
-		<ScrollView flex={1}>
+		<ScrollView flex={1} marginTop={"$6"}>
 			<YStack
 				padding="$6"
 				gap="$4"
@@ -30,9 +40,17 @@ export function PublicArticleView({
 				width="100%"
 			>
 				<YStack gap="$2">
-					<Text fontSize="$3" color="$color11" textTransform="uppercase">
-						{platform.name}
-					</Text>
+					<XStack gap="$2" alignItems="center">
+						<Image
+							source={{ uri: iconUrl }}
+							width={20}
+							height={20}
+							alt={`${platform.name} icon`}
+						/>
+						<Text fontSize="$3" color="$color11" textTransform="uppercase">
+							{platform.name}
+						</Text>
+					</XStack>
 					<H1 fontSize="$10" fontWeight="bold">
 						{article.title}
 					</H1>
@@ -42,6 +60,12 @@ export function PublicArticleView({
 						</Text>
 					)}
 				</YStack>
+
+				<ShareArticle
+					title={article.title}
+					summary={article.summary || undefined}
+					url={url}
+				/>
 
 				<Separator />
 
@@ -58,13 +82,6 @@ export function PublicArticleView({
 				</YStack>
 
 				<Separator marginTop="$6" />
-
-				<ShareArticle
-					title={article.title}
-					summary={article.summary || undefined}
-					url={url}
-				/>
-
 				<Text fontSize="$2" color="$color10" textAlign="center" marginTop="$4">
 					Last updated: {new Date(article.updated_at).toLocaleDateString()}
 				</Text>

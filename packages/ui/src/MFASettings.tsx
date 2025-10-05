@@ -7,7 +7,7 @@ import {
 	Text,
 	Button,
 	Card,
-	Spinner color="$accent",
+	Spinner,
 	H5,
 	Separator,
 } from "tamagui";

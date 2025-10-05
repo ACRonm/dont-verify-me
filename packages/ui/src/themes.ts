@@ -69,6 +69,7 @@ const builtThemes = createThemes({
 				...lightShadows,
 				shadowColor: lightShadows.shadow1,
 				accent: "hsla(217, 91%, 60%, 1)", // default accent color (blue-500)
+				accentHovered: "hsla(217, 91%, 55%, 1)", // darker accent for hover states
 				backgroundStrong: "#e6e6e6",
 				backgroundTransparent: "hsla(210, 40%, 96.1%, 30)",
 				navbarBackground: "rgba(220, 220, 220, 0.5)",
@@ -86,6 +87,7 @@ const builtThemes = createThemes({
 				...darkShadows,
 				shadowColor: darkShadows.shadow1,
 				accent: "#75dd62", // default accent color (blue-500)
+				accentHovered: "#65cd52", // darker accent for hover states
 				backgroundStrong: "hsla(23, 39%, 5%, 1.00)", // Adding backgroundStrong
 				backgroundTransparent: "hsla(222, 47%, 11%, 0)",
 				navbarBackground: "rgba(120, 120, 120, 0.2)",

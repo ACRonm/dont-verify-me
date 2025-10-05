@@ -10,12 +10,10 @@ import {
 	Button,
 	YStack,
 	Text,
-	XStack,
 	Separator,
 	View,
 	Paragraph,
-	Spinner color="$accent",
-	useMedia,
+	Spinner,
 } from "tamagui";
 
 export default function LoginPage() {

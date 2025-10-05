@@ -13,6 +13,7 @@ import {
 	H1,
 	ScrollView,
 	Tabs,
+	Image,
 } from "tamagui";
 import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -34,6 +35,7 @@ import {
 	Eye,
 	Edit3,
 } from "@tamagui/lucide-icons";
+import { ShareArticle } from "./ShareArticle";
 import "./editor-styles.css";
 
 interface ArticleEditorProps {
@@ -41,6 +43,7 @@ interface ArticleEditorProps {
 	onSave: (article: Partial<Article>) => Promise<void>;
 	onCancel: () => void;
 	platformName: string;
+	platformIconUrl?: string;
 }
 
 export function ArticleEditor({
@@ -48,6 +51,7 @@ export function ArticleEditor({
 	onSave,
 	onCancel,
 	platformName,
+	platformIconUrl,
 }: ArticleEditorProps) {
 	const [title, setTitle] = useState(initialData?.title || "");
 	const [summary, setSummary] = useState(initialData?.summary || "");
@@ -321,9 +325,23 @@ export function ArticleEditor({
 							width="100%"
 						>
 							<YStack gap="$2">
-								<Text fontSize="$3" color="$color11" textTransform="uppercase">
-									{platformName}
-								</Text>
+								<XStack gap="$2" alignItems="center">
+									{platformIconUrl && (
+										<Image
+											source={{ uri: platformIconUrl }}
+											width={20}
+											height={20}
+											alt={`${platformName} icon`}
+										/>
+									)}
+									<Text
+										fontSize="$3"
+										color="$color11"
+										textTransform="uppercase"
+									>
+										{platformName}
+									</Text>
+								</XStack>
 								<H1 fontSize="$10" fontWeight="bold">
 									{title || "Untitled Article"}
 								</H1>
@@ -333,9 +351,12 @@ export function ArticleEditor({
 									</Text>
 								)}
 							</YStack>
-
+							<ShareArticle
+								title={title || "Untitled Article"}
+								summary={summary || undefined}
+								url={typeof window !== "undefined" ? window.location.href : ""}
+							/>
 							<Separator />
-
 							<YStack gap="$4" className="tiptap-wrapper">
 								{editor?.getHTML() && editor.getHTML() !== "<p></p>" ? (
 									<div
@@ -353,9 +374,7 @@ export function ArticleEditor({
 									</Text>
 								)}
 							</YStack>
-
 							<Separator marginTop="$6" />
-
 							<Text fontSize="$2" color="$color10" textAlign="center">
 								Preview - Last updated: {new Date().toLocaleDateString()}
 							</Text>

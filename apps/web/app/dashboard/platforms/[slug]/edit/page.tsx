@@ -80,7 +80,12 @@ export default function EditArticlePage({
 	if (loading) {
 		return (
 			<ThemedPage>
-				<YStack flex={1} justifyContent="center" alignItems="center">
+				<YStack
+					flex={1}
+					justifyContent="center"
+					alignItems="center"
+					minHeight="100vh"
+				>
 					<Spinner color="$accent" size="large" />
 				</YStack>
 			</ThemedPage>
@@ -90,7 +95,12 @@ export default function EditArticlePage({
 	if (!platform) {
 		return (
 			<ThemedPage>
-				<YStack flex={1} justifyContent="center" alignItems="center">
+				<YStack
+					flex={1}
+					justifyContent="center"
+					alignItems="center"
+					minHeight="100vh"
+				>
 					<Text color="$red10">Platform not found</Text>
 				</YStack>
 			</ThemedPage>
@@ -106,6 +116,9 @@ export default function EditArticlePage({
 						onSave={handleSave}
 						onCancel={handleCancel}
 						platformName={platform.name}
+						platformIconUrl={
+							platform.icon_url || `/icons/platforms/${platform.slug}.svg`
+						}
 					/>
 				</YStack>
 			</YStack>
