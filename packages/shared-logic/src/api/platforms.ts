@@ -69,9 +69,9 @@ export async function getPlatformBySlug(
 		.from("platforms")
 		.select(
 			`
-      *,
-      articles (*)
-    `
+			*,
+			articles (*)
+		`
 		)
 		.eq("slug", slug)
 		.eq("is_published", true)
@@ -82,11 +82,21 @@ export async function getPlatformBySlug(
 		return null;
 	}
 
-	// Handle the articles array from Supabase
+	// Handle the articles from Supabase - can be an array or a single object
 	const articles = (data as any).articles;
+	let article;
+
+	if (Array.isArray(articles)) {
+		// If it's an array, find the first published article
+		article = articles.find((a: any) => a.is_published) || undefined;
+	} else if (articles && typeof articles === "object") {
+		// If it's a single object and published, use it
+		article = articles.is_published ? articles : undefined;
+	}
+
 	return {
 		...data,
-		article: articles && articles.length > 0 ? articles[0] : undefined,
+		article,
 	};
 }
 
@@ -98,9 +108,9 @@ export async function getPlatformBySlugAdmin(
 		.from("platforms")
 		.select(
 			`
-      *,
-      articles (*)
-    `
+			*,
+			articles (*)
+		`
 		)
 		.eq("slug", slug)
 		.single();

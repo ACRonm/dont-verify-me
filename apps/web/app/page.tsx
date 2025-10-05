@@ -1,134 +1,89 @@
 "use client";
 
 import { ThemedPage } from "@dont-verify-me/ui";
-import {
-	H1,
-	H2,
-	YStack,
-	Text,
-	XStack,
-	Input,
-	Button,
-	Separator,
-} from "tamagui";
+import { H1, H2, YStack, Text } from "tamagui";
 import { LandingPageNavbar } from "../components/LandingPageNavbar";
-import { FeatureCard } from "../components/FeatureCard";
-import { Bike, Wrench, Route } from "@tamagui/lucide-icons";
-import { useState } from "react";
+import { PlatformDirectory } from "../components/PlatformDirectory";
+import { useEffect, useState } from "react";
+import {
+	getPublishedPlatforms,
+	type Platform,
+} from "@dont-verify-me/shared-logic";
 
-export default function LandingPage() {
-	const [email, setEmail] = useState("");
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState(false);
+export default function HomePage() {
+	const [platforms, setPlatforms] = useState<Platform[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	const fetchPlatforms = async () => {
+		try {
+			setLoading(true);
+			setError(null);
+			const data = await getPublishedPlatforms();
+			setPlatforms(data);
+		} catch (err) {
+			console.error("Error fetching platforms:", err);
+			setError("Failed to load platforms. Please try again later.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchPlatforms();
+	}, []);
 
 	return (
 		<ThemedPage>
 			<LandingPageNavbar />
+
+			{/* Hero Section */}
 			<YStack
 				flex={1}
 				justifyContent="center"
 				alignItems="center"
 				paddingHorizontal="$6"
-				gap="$4"
-				paddingVertical="$8"
+				paddingVertical="$12"
 				paddingTop="$16"
+				gap="$4"
 			>
-				<Text
+				<H1
 					textAlign="center"
 					fontSize="$10"
 					lineHeight="$9"
 					fontWeight="bold"
+					maxWidth={800}
 				>
 					Protect Your Privacy. <Text color="$accent">Stay Anonymous.</Text>
-				</Text>
-				<Text textAlign="center" fontSize="$7" color="$color11" maxWidth={600}>
-					Dont Verify Me is launching soon! Join our waitlist to be the first to
-					access privacy protection resources.
-				</Text>
-				<Separator borderColor="$accent" margin="$4" />
-				<Text textAlign="center" fontSize="$7" color="$color11" maxWidth={600}>
-					We are building the best tool to help you keep track of your
-					motorcycle's tire wear and maintenance, so you can ride with
-					confidence.
-				</Text>
-				<XStack
-					gap="$3"
-					marginTop="$4"
-					width="100%"
-					maxWidth={450}
-					alignItems="center"
+				</H1>
+				<Text
+					textAlign="center"
+					fontSize="$6"
+					color="$color11"
+					maxWidth={700}
+					lineHeight="$5"
 				>
-					<Input
-						flex={1}
-						size="$4"
-						placeholder="Enter your email address"
-						value={email}
-						onChangeText={setEmail}
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoComplete="email"
-					/>
-					<Button
-						size="$4"
-						borderWidth={1}
-						borderColor="$accent"
-						backgroundColor="transparent"
-						color="$accent"
-						hoverStyle={{
-							backgroundColor: "$orange5",
-							borderColor: "$accent",
-						}}
-						pressStyle={{
-							backgroundColor: "$orange5",
-						}}
-						disabled={loading}
-					>
-						{loading ? "Joining..." : "Join Waitlist"}
-					</Button>
-				</XStack>
-				{success && (
-					<Text color="$green10" marginTop="$2">
-						Thank you for joining the waitlist!
-					</Text>
-				)}
-				{typeof error === "string" && error.length > 0 && (
-					<Text color="$red10" marginTop="$2">
-						{error}
-					</Text>
-				)}
+					Comprehensive guides to bypass age verification and maintain your
+					privacy on social media platforms.
+				</Text>
 			</YStack>
+
+			{/* Platform Directory Section */}
 			<YStack
-				id="features"
 				paddingHorizontal="$6"
 				paddingVertical="$8"
 				gap="$6"
 				alignItems="center"
 			>
-				<H2 textAlign="center">Features</H2>
-				<XStack
-					flexWrap="wrap"
-					justifyContent="center"
-					gap="$4"
-					maxWidth={1120}
-					alignItems="stretch"
-				>
-					<FeatureCard
-						title="Tire Wear Tracking"
-						description="Log your rides and automatically track your tire wear."
-						icon={<Bike strokeWidth={1.5} />}
-					/>
-					<FeatureCard
-						title="Maintenance Reminders"
-						description="Get reminders for important maintenance tasks."
-						icon={<Wrench strokeWidth={1.5} />}
-					/>
-					<FeatureCard
-						title="Ride Logging"
-						description="Keep a detailed log of all your motorcycle rides."
-						icon={<Route strokeWidth={1.5} />}
-					/>
-				</XStack>
+				<H2 textAlign="center" fontSize="$8" fontWeight="600">
+					Available Privacy Guides
+				</H2>
+				<PlatformDirectory
+					platforms={platforms}
+					loading={loading}
+					error={error}
+					onRetry={fetchPlatforms}
+				/>
 			</YStack>
 		</ThemedPage>
 	);

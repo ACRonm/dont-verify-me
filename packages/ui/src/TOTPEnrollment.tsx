@@ -41,43 +41,25 @@ export function TOTPEnrollment({
 
 		(async () => {
 			try {
-				console.log("Starting MFA enrollment...");
 				const data = await enrollFunction();
-
-				console.log("Enrollment API call completed");
-
 				if (!isSubscribed) {
-					console.log(
-						"Component unmounted before enrollment data could be set"
-					);
 					return;
 				}
-
-				console.log("Enrollment data received:", {
-					hasId: !!data.id,
-					hasQRCode: !!data.totp?.qr_code,
-					hasSecret: !!data.totp?.secret,
-				});
 				setFactorId(data.id);
 				setQRCode(data.totp.qr_code);
 				setSecret(data.totp.secret);
-				console.log("State updated with enrollment data");
 			} catch (err) {
 				if (!isSubscribed) return;
 				console.error("Enrollment error:", err);
 				setError(err instanceof Error ? err.message : "Failed to enroll");
 			} finally {
 				if (isSubscribed) {
-					console.log("Setting loading to false");
 					setLoading(false);
-				} else {
-					console.log("Component unmounted, not updating loading state");
 				}
 			}
 		})();
 
 		return () => {
-			console.log("TOTPEnrollment useEffect cleanup");
 			isSubscribed = false;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,10 +70,6 @@ export function TOTPEnrollment({
 		return () => {
 			// On unmount, if we have a factorId and it's not verified, clean it up
 			if (factorId && !isVerified) {
-				console.log(
-					"Component unmounting, cleaning up unverified factor:",
-					factorId
-				);
 				unenrollFunction(factorId).catch((error) => {
 					console.error(
 						"Failed to cleanup unverified factor on unmount:",
@@ -129,7 +107,6 @@ export function TOTPEnrollment({
 		if (factorId) {
 			try {
 				await unenrollFunction(factorId);
-				console.log("Cleaned up unverified factor on cancel:", factorId);
 				setIsVerified(true); // Mark as handled to prevent double cleanup on unmount
 			} catch (error) {
 				console.error("Failed to cleanup unverified factor:", error);

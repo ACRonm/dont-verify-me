@@ -29,12 +29,8 @@ export function MFASettings() {
 		setLoading(true);
 		try {
 			const data = await mfa.listFactors();
-			console.log("MFA factors loaded:", data);
-			console.log("All factors:", data.all);
-			console.log("TOTP factors:", data.totp);
 			// Use 'all' to show both verified and unverified factors
 			const allFactors = data.all || [];
-			console.log("Number of factors:", allFactors.length);
 			setFactors(allFactors);
 		} catch (error) {
 			console.error("Failed to load MFA factors:", error);
@@ -85,14 +81,9 @@ export function MFASettings() {
 				(factor) => factor.status === "unverified"
 			);
 
-			console.log(
-				`Cleaning up ${unverifiedFactors.length} unverified factors...`
-			);
-
 			for (const factor of unverifiedFactors) {
 				try {
 					await mfa.unenroll(factor.id);
-					console.log("Removed unverified factor:", factor.id);
 				} catch (error) {
 					console.error("Failed to remove unverified factor:", error);
 				}
@@ -122,12 +113,6 @@ export function MFASettings() {
 				(factor) => factor.status === "unverified"
 			);
 
-			console.log("Pre-enrollment cleanup:", {
-				total: allFactors.length,
-				verified: verifiedFactors.length,
-				unverified: unverifiedFactors.length,
-			});
-
 			// Check if user has reached the maximum number of factors
 			if (verifiedFactors.length >= 10) {
 				setError(
@@ -140,7 +125,6 @@ export function MFASettings() {
 			for (const factor of unverifiedFactors) {
 				try {
 					await mfa.unenroll(factor.id);
-					console.log("Removed unverified factor:", factor.id);
 				} catch (error) {
 					console.error("Failed to remove unverified factor:", error);
 				}

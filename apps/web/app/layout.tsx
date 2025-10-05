@@ -20,7 +20,8 @@ export default function RootLayout({
 }) {
 	const pathname = usePathname();
 	const noNavRoutes = ["/login", "/signup", "/"];
-	const showNav = !noNavRoutes.includes(pathname);
+	const isPlatformPage = pathname?.startsWith("/platforms/");
+	const showNav = !noNavRoutes.includes(pathname) && !isPlatformPage;
 	const [theme, setTheme] = useState("dark");
 
 	const themeContextValue: ThemeContextType = {
