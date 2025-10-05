@@ -1,185 +1,142 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-	EmptyStateDashboard,
-	StatsGraphCard,
-	ThemedPage,
-	MaintenanceLogTable,
-	StatsGraphCardSkeleton,
-	MaintenanceLogTableSkeleton,
-	QuickActions,
-	QuickActionsSkeleton,
-	AlertsPanel,
-	AlertsPanelSkeleton,
-} from "@dont-verify-me/ui";
+import { ThemedPage, PlatformCard, PlatformForm } from "@dont-verify-me/ui";
 import {
 	useAuth,
-	getMotorcyclesForUser,
-	Motorcycle,
+	getAllPlatforms,
+	getArticleByPlatformId,
+	createPlatform,
+	deletePlatform,
+	togglePlatformPublish,
+	Platform,
 } from "@dont-verify-me/shared-logic";
 import { useRouter } from "next/navigation";
-import {
-	YStack,
-	Text,
-	ScrollView,
-	H2,
-	Separator,
-	XStack,
-	useMedia,
-} from "tamagui";
+import { YStack, H1, Button, ScrollView, XStack, Text, Spinner } from "tamagui";
+import { Plus } from "@tamagui/lucide-icons";
 
 export default function DashboardPage() {
 	const { user } = useAuth();
-	const [motorcycles, setMotorcycles] = useState<Motorcycle[] | null>(null);
+	const [platforms, setPlatforms] = useState<Platform[]>([]);
+	const [platformArticles, setPlatformArticles] = useState<
+		Record<string, boolean>
+	>({});
 	const [loading, setLoading] = useState(true);
+	const [showCreateForm, setShowCreateForm] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-
-	const media = useMedia();
 	const router = useRouter();
 
 	useEffect(() => {
-		const fetchMotorcycles = async () => {
-			setLoading(true);
-			setError(null);
-			try {
-				const data = await getMotorcyclesForUser();
-				setMotorcycles(data);
-			} catch (err) {
-				console.error("Failed to fetch motorcycles:", err);
-				setError("Failed to load motorcycles. Please try again later.");
-			} finally {
-				setLoading(false);
-			}
-		};
-
 		if (user) {
-			fetchMotorcycles();
+			loadPlatforms();
 		}
 	}, [user]);
 
-	const handleAddMotorcycle = () => {
-		router.push("/add-motorcycle");
+	const loadPlatforms = async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const data = await getAllPlatforms();
+			setPlatforms(data);
+
+			// Check which platforms have articles
+			const articleChecks: Record<string, boolean> = {};
+			await Promise.all(
+				data.map(async (platform) => {
+					const article = await getArticleByPlatformId(platform.id);
+					articleChecks[platform.id] = !!article;
+				})
+			);
+			setPlatformArticles(articleChecks);
+		} catch (err) {
+			console.error("Failed to fetch platforms:", err);
+			setError("Failed to load platforms. Please try again.");
+		} finally {
+			setLoading(false);
+		}
 	};
 
-	if (error) {
+	const handleCreatePlatform = async (data: Partial<Platform>) => {
+		await createPlatform(data as any);
+		setShowCreateForm(false);
+		loadPlatforms();
+	};
+
+	const handleTogglePublish = async (id: string) => {
+		await togglePlatformPublish(id);
+		loadPlatforms();
+	};
+
+	const handleDelete = async (id: string) => {
+		if (confirm("Are you sure you want to delete this platform?")) {
+			await deletePlatform(id);
+			loadPlatforms();
+		}
+	};
+
+	const handleEditArticle = (platformId: string, slug: string) => {
+		router.push(`/dashboard/platforms/${slug}/edit`);
+	};
+	if (loading) {
 		return (
 			<ThemedPage>
 				<YStack flex={1} justifyContent="center" alignItems="center">
-					<Text color="$red10" fontSize="$5" marginVertical="$5">
-						Error: {error}
-					</Text>
+					<Spinner size="large" />
 				</YStack>
 			</ThemedPage>
 		);
 	}
 
-	if (loading) {
+	if (error) {
 		return (
 			<ThemedPage>
-				<ScrollView
-					flex={1}
-					paddingTop="$4"
-					contentContainerStyle={{ paddingBottom: "$6" }}
-				>
-					<QuickActionsSkeleton />
-					<YStack gap="$4" paddingHorizontal="$4">
-						<XStack gap="$4" flexDirection={media.lg ? "column" : "row"}>
-							<YStack
-								gap="$4"
-								flex={1}
-								flexDirection={media.lg ? "column" : "row"}
-							>
-								<StatsGraphCardSkeleton />
-								<AlertsPanelSkeleton />
-							</YStack>
-						</XStack>
-						<XStack gap="$4" flexDirection={media.ltLg ? "column" : "row"}>
-							<MaintenanceLogTableSkeleton flex={2} />
-							<YStack
-								flex={1}
-								gap="$3"
-								padding="$4"
-								borderRadius="$4"
-								borderWidth={1}
-								borderColor="$borderColor"
-							>
-								<XStack flexWrap="wrap" gap="$3">
-								</XStack>
-							</YStack>
-						</XStack>
-					</YStack>
-				</ScrollView>
+				<YStack flex={1} justifyContent="center" alignItems="center">
+					<Text color="$red10">{error}</Text>
+				</YStack>
 			</ThemedPage>
 		);
 	}
-
-	if (!motorcycles || motorcycles.length === 0) {
-		return (
-			<ThemedPage>
-				<EmptyStateDashboard onAddMotorcycle={handleAddMotorcycle} />
-			</ThemedPage>
-		);
-	}
-
-	const primaryBike = motorcycles[0]!;
-	const otherBikes = motorcycles.slice(1);
 
 	return (
 		<ThemedPage>
-			<ScrollView
-				flex={1}
-				paddingTop="$4"
-				contentContainerStyle={{ paddingBottom: "$6" }}
-			>
-				<QuickActions motorcycle={primaryBike} />
-				<YStack gap="$4" paddingHorizontal="$4">
-					<XStack gap="$4" flexDirection={media.md ? "column" : "row"}>
-						<YStack
-							gap="$4"
-							flex={1}
-							flexDirection={media.lg ? "column" : "row"}
+			<ScrollView flex={1} padding="\$4">
+				<YStack gap="\$4" maxWidth={1200} alignSelf="center" width="100%">
+					<XStack justifyContent="space-between" alignItems="center">
+						<H1>Content Management</H1>
+						<Button
+							icon={<Plus />}
+							onPress={() => setShowCreateForm(true)}
+							theme="blue"
 						>
-							<XStack
-								flex={1}
-								gap="$4"
-								flexDirection={media.gtLg ? "row" : "column"}
-							>
-								<StatsGraphCard />
-								<AlertsPanel />
-							</XStack>
-						</YStack>
+							Add Platform
+						</Button>
 					</XStack>
-					<XStack gap="$4" flexDirection={media.ltLg ? "column" : "row"}>
-						<YStack
-							flex={2}
-							gap="$3"
-							padding="$4"
-							borderRadius="$4"
-							borderWidth={1}
-							borderColor="$borderColor"
-						>
-							<H2 fontSize="$6">Maintenance Logs</H2>
-							<Separator />
-							<MaintenanceLogTable />
-						</YStack>
 
-						{otherBikes.length > 0 && (
-							<YStack
-								flex={1}
-								gap="$3"
-								padding="$4"
-								borderRadius="$4"
-								borderWidth={1}
-								borderColor="$borderColor"
-							>
-								<H2 fontSize="$6">Other Motorcycles</H2>
-								<Separator />
-								<YStack gap="$3">
-								</YStack>
-							</YStack>
+					{showCreateForm && (
+						<PlatformForm
+							onSave={handleCreatePlatform}
+							onCancel={() => setShowCreateForm(false)}
+						/>
+					)}
+
+					<YStack gap="\$3">
+						{platforms.length === 0 ? (
+							<Text color="\$gray11" textAlign="center" padding="\$6">
+								No platforms yet. Create one to get started!
+							</Text>
+						) : (
+							platforms.map((platform) => (
+								<PlatformCard
+									key={platform.id}
+									platform={platform}
+									hasArticle={platformArticles[platform.id] || false}
+									onEdit={() => handleEditArticle(platform.id, platform.slug)}
+									onTogglePublish={() => handleTogglePublish(platform.id)}
+									onDelete={() => handleDelete(platform.id)}
+								/>
+							))
 						)}
-					</XStack>
+					</YStack>
 				</YStack>
 			</ScrollView>
 		</ThemedPage>
