@@ -50,43 +50,41 @@ export function EmptyStateDashboard({
 						xmlns="http://www.w3.org/2000/svg"
 						role="img"
 						aria-label="Loading"
-						style={{ width: '100%', height: 'auto' }}
+						style={{ width: "100%", height: "auto" }}
 					>
-					<defs>
-						<radialGradient id="outerGradient1" cx="50%" cy="50%" r="50%">
-							<stop offset="0%" stopColor="#e8f9e6" stopOpacity="0.3" />
-							<stop offset="70%" stopColor="#c8eec4" stopOpacity="0.5" />
-							<stop offset="100%" stopColor="#a8e39f" stopOpacity="0.7" />
-						</radialGradient>
-						<radialGradient id="outerGradient2" cx="50%" cy="50%" r="50%">
-							<stop offset="0%" stopColor="#e8f9e6" stopOpacity="0.3" />
-							<stop offset="70%" stopColor="#c8eec4" stopOpacity="0.5" />
-							<stop offset="100%" stopColor="#a8e39f" stopOpacity="0.7" />
-						</radialGradient>
-						<radialGradient id="outerGradient3" cx="50%" cy="50%" r="50%">
-							<stop offset="0%" stopColor="#e8f9e6" stopOpacity="0.3" />
-							<stop offset="70%" stopColor="#c8eec4" stopOpacity="0.5" />
-							<stop offset="100%" stopColor="#a8e39f" stopOpacity="0.7" />
-						</radialGradient>
-					</defs>
-
-					{/* First dot */}
-					<g>
-						<circle cx="40" cy="40" r="30" fill="url(#outerGradient1)" />
-						<circle cx="40" cy="40" r="20" fill="#75dd62" />
-					</g>
-
-					{/* Second dot */}
-					<g>
-						<circle cx="100" cy="40" r="30" fill="url(#outerGradient2)" />
-						<circle cx="100" cy="40" r="20" fill="#75dd62" />
-					</g>
-
-					{/* Third dot */}
-					<g>
-						<circle cx="160" cy="40" r="30" fill="url(#outerGradient3)" />
-						<circle cx="160" cy="40" r="20" fill="#75dd62" />
-					</g>						<style>
+						<defs>
+							<radialGradient id="outerGradient1" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stopColor="#e8f9e6" stopOpacity="0.3" />
+								<stop offset="70%" stopColor="#c8eec4" stopOpacity="0.5" />
+								<stop offset="100%" stopColor="#a8e39f" stopOpacity="0.7" />
+							</radialGradient>
+							<radialGradient id="outerGradient2" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stopColor="#e8f9e6" stopOpacity="0.3" />
+								<stop offset="70%" stopColor="#c8eec4" stopOpacity="0.5" />
+								<stop offset="100%" stopColor="#a8e39f" stopOpacity="0.7" />
+							</radialGradient>
+							<radialGradient id="outerGradient3" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stopColor="#e8f9e6" stopOpacity="0.3" />
+								<stop offset="70%" stopColor="#c8eec4" stopOpacity="0.5" />
+								<stop offset="100%" stopColor="#a8e39f" stopOpacity="0.7" />
+							</radialGradient>
+						</defs>
+						{/* First dot */}
+						<g>
+							<circle cx="40" cy="40" r="30" fill="url(#outerGradient1)" />
+							<circle cx="40" cy="40" r="20" fill="#75dd62" />
+						</g>
+						{/* Second dot */}
+						<g>
+							<circle cx="100" cy="40" r="30" fill="url(#outerGradient2)" />
+							<circle cx="100" cy="40" r="20" fill="#75dd62" />
+						</g>
+						{/* Third dot */}
+						<g>
+							<circle cx="160" cy="40" r="30" fill="url(#outerGradient3)" />
+							<circle cx="160" cy="40" r="20" fill="#75dd62" />
+						</g>{" "}
+						<style>
 							{`
 								@keyframes pulse {
 									0%, 100% { opacity: 1; }
