@@ -2,17 +2,23 @@
 
 import { YStack, H1, Text, Separator, ScrollView } from "tamagui";
 import type { Article, Platform } from "@dont-verify-me/shared-logic";
+import { ShareArticle } from "./ShareArticle";
 import "./editor-styles.css";
 
 interface PublicArticleViewProps {
 	article: Article;
 	platform: Platform;
+	shareUrl?: string;
 }
 
 export function PublicArticleView({
 	article,
 	platform,
+	shareUrl,
 }: PublicArticleViewProps) {
+	// Generate the share URL if not provided
+	const url = shareUrl || (typeof window !== "undefined" ? window.location.href : "");
+
 	return (
 		<ScrollView flex={1}>
 			<YStack
@@ -52,7 +58,13 @@ export function PublicArticleView({
 
 				<Separator marginTop="$6" />
 
-				<Text fontSize="$2" color="$color10" textAlign="center">
+				<ShareArticle
+					title={article.title}
+					summary={article.summary || undefined}
+					url={url}
+				/>
+
+				<Text fontSize="$2" color="$color10" textAlign="center" marginTop="$4">
 					Last updated: {new Date(article.updated_at).toLocaleDateString()}
 				</Text>
 			</YStack>

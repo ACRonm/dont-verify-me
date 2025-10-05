@@ -34,6 +34,7 @@ export * from "./PlatformCard";
 export * from "./PlatformForm";
 export * from "./PublicArticleView";
 export * from "./ArticleEditor";
+export * from "./ShareArticle";
 
 // TOTP MFA components
 export * from "./TOTPEnrollment";

@@ -22,7 +22,8 @@ export default function AuthWrapper({
 		pathname === "/login" ||
 		pathname === "/signup" ||
 		pathname === "/" ||
-		pathname === "/privacy";
+		pathname === "/privacy" ||
+		pathname?.startsWith("/platforms/");
 	if (isPublicRoute) {
 		return <>{children}</>;
 	}
