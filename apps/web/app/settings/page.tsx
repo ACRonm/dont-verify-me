@@ -17,7 +17,7 @@ import {
 	RadioGroup,
 	useMedia,
 } from "tamagui";
-import { ThemedPage, RadioGroupItem } from "@dont-verify-me/ui";
+import { ThemedPage, RadioGroupItem, MFASettings } from "@dont-verify-me/ui";
 
 const SettingsTabContent = (props: TabsContentProps) => {
 	return (
@@ -159,8 +159,11 @@ export default function SettingsPage() {
 						<YStack gap="$4">
 							<H2 fontSize="$6">Account Management</H2>
 							<Separator />
-							<YStack gap="$3">
+							<YStack gap="$4">
 								<Button>Change Password</Button>
+
+								<MFASettings />
+
 								<YStack gap="$2">
 									<H5 color="$red10">Danger Zone</H5>
 									<Paragraph color="$color10" fontSize="$2">

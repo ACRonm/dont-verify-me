@@ -34,3 +34,8 @@ export * from "./PlatformCard";
 export * from "./ArticleEditor";
 export * from "./PlatformForm";
 export * from "./PublicArticleView";
+
+// TOTP MFA components
+export * from "./TOTPEnrollment";
+export * from "./TOTPChallenge";
+export * from "./MFASettings";

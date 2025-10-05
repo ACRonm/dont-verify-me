@@ -47,9 +47,57 @@ export function useAuth() {
 		signInLoading,
 		signUpLoading,
 		signOutLoading,
+		// MFA methods
+		mfa: {
+			enroll: async () => {
+				const { data, error } = await supabase.auth.mfa.enroll({
+					factorType: "totp",
+					friendlyName: `Authenticator App ${new Date().toISOString()}`,
+				});
+				if (error) throw error;
+				return data;
+			},
+			challenge: async (factorId: string) => {
+				const { data, error } = await supabase.auth.mfa.challenge({
+					factorId,
+				});
+				if (error) throw error;
+				return data;
+			},
+			verify: async (factorId: string, challengeId: string, code: string) => {
+				const { data, error } = await supabase.auth.mfa.verify({
+					factorId,
+					challengeId,
+					code,
+				});
+				if (error) throw error;
+				return data;
+			},
+			listFactors: async () => {
+				const { data, error } = await supabase.auth.mfa.listFactors();
+				if (error) throw error;
+				return data;
+			},
+			unenroll: async (factorId: string) => {
+				const { data, error } = await supabase.auth.mfa.unenroll({
+					factorId,
+				});
+				if (error) throw error;
+				return data;
+			},
+			getAuthenticatorAssuranceLevel: async () => {
+				const { data, error } =
+					await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+				if (error) throw error;
+				return data;
+			},
+		},
 		signInWithGoogle: async () => {
 			setSignInLoading(true);
-			const redirectTo = new URL("/dashboard", window.location.origin).toString();
+			const redirectTo = new URL(
+				"/dashboard",
+				window.location.origin
+			).toString();
 			const { error } = await supabase.auth.signInWithOAuth({
 				provider: "google",
 				options: {

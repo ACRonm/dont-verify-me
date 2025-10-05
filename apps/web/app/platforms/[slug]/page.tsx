@@ -66,7 +66,7 @@ export default function PlatformPage({
 					padding="$6"
 				>
 					<H1>Platform Not Found</H1>
-					<Text color="$gray11" marginTop="$4">
+					<Text color="$color11" marginTop="$4">
 						This platform doesn't exist or hasn't been published yet.
 					</Text>
 				</YStack>

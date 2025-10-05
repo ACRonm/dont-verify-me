@@ -134,7 +134,7 @@ export default function DashboardPage() {
 
 					<YStack gap="$3">
 						{platforms.length === 0 ? (
-							<Text color="$gray11" textAlign="center" padding="$6">
+							<Text color="$color11" textAlign="center" padding="$6">
 								No platforms yet. Create one to get started!
 							</Text>
 						) : (
