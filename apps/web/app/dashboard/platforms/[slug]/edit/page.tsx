@@ -81,7 +81,7 @@ export default function EditArticlePage({
 		return (
 			<ThemedPage>
 				<YStack flex={1} justifyContent="center" alignItems="center">
-					<Spinner size="large" />
+					<Spinner color="$accent" size="large" />
 				</YStack>
 			</ThemedPage>
 		);

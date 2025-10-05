@@ -14,7 +14,7 @@ import {
 	Separator,
 	View,
 	Paragraph,
-	Spinner,
+	Spinner color="$accent",
 	useMedia,
 } from "tamagui";
 
@@ -88,7 +88,7 @@ export default function LoginPage() {
 									width="100%"
 									color="$color"
 									variant="outlined"
-									icon={signInLoading ? () => <Spinner /> : undefined}
+									icon={signInLoading ? () => <Spinner color="$accent" /> : undefined}
 								>
 									{!signInLoading && <Text color={"$color"}>Sign in</Text>}
 								</Button>
@@ -112,7 +112,7 @@ export default function LoginPage() {
 									onPress={handleGoogleLogin}
 									variant="outlined"
 									disabled={signInLoading}
-									icon={signInLoading ? () => <Spinner /> : undefined}
+									icon={signInLoading ? () => <Spinner color="$accent" /> : undefined}
 								>
 									{!signInLoading && (
 										<>

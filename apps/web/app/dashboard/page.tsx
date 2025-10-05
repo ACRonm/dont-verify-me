@@ -83,14 +83,14 @@ export default function DashboardPage() {
 		}
 	};
 
-	const handleEditArticle = (platformId: string, slug: string) => {
+	const handleEditArticle = (slug: string) => {
 		router.push(`/dashboard/platforms/${slug}/edit`);
 	};
 	if (loading) {
 		return (
 			<ThemedPage>
 				<YStack flex={1} justifyContent="center" alignItems="center">
-					<Spinner size="large" />
+					<Spinner color="$accent" size="large" />
 				</YStack>
 			</ThemedPage>
 		);
@@ -143,7 +143,7 @@ export default function DashboardPage() {
 									key={platform.id}
 									platform={platform}
 									hasArticle={platformArticles[platform.id] || false}
-									onEdit={() => handleEditArticle(platform.id, platform.slug)}
+									onEdit={() => handleEditArticle(platform.slug)}
 									onTogglePublish={() => handleTogglePublish(platform.id)}
 									onDelete={() => handleDelete(platform.id)}
 								/>

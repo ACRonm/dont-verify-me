@@ -7,7 +7,7 @@ import {
 	Platform,
 	Article,
 } from "@dont-verify-me/shared-logic";
-import { YStack, Spinner, Text, H1 } from "tamagui";
+import { YStack, Spinner color="$accent", Text, H1 } from "tamagui";
 import { LandingPageNavbar } from "../../../components/LandingPageNavbar";
 
 export default function PlatformPage({
@@ -44,7 +44,7 @@ export default function PlatformPage({
 			<ThemedPage>
 				<LandingPageNavbar />
 				<YStack flex={1} justifyContent="center" alignItems="center">
-					<Spinner size="large" />
+					<Spinner color="$accent" size="large" />
 				</YStack>
 			</ThemedPage>
 		);

@@ -123,7 +123,9 @@ export default function SignupPage() {
 								width="100%"
 								color="$color"
 								variant="outlined"
-								icon={signUpLoading ? () => <Spinner /> : undefined}
+								icon={
+									signUpLoading ? () => <Spinner color="$accent" /> : undefined
+								}
 							>
 								{!signUpLoading && <Text>Sign up</Text>}
 							</Button>
@@ -142,7 +144,9 @@ export default function SignupPage() {
 								onPress={handleGoogleSignup}
 								variant="outlined"
 								disabled={signInLoading || signUpLoading}
-								icon={signInLoading ? () => <Spinner /> : undefined}
+								icon={
+									signInLoading ? () => <Spinner color="$accent" /> : undefined
+								}
 							>
 								{!signInLoading && (
 									<>

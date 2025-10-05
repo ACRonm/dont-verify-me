@@ -7,7 +7,7 @@ import {
 	Text,
 	Button,
 	Card,
-	Spinner,
+	Spinner color="$accent",
 	H5,
 	Separator,
 } from "tamagui";
@@ -144,7 +144,7 @@ export function MFASettings() {
 	if (loading) {
 		return (
 			<YStack padding="$4" alignItems="center" gap="$2">
-				<Spinner size="large" />
+				<Spinner color="$accent" size="large" />
 				<Text fontSize={14} color="$color11">
 					Loading authentication factors...
 				</Text>
@@ -209,7 +209,7 @@ export function MFASettings() {
 									theme="yellow"
 									onPress={handleCleanupUnverified}
 									disabled={cleaningUp}
-									icon={cleaningUp ? () => <Spinner /> : undefined}
+									icon={cleaningUp ? () => <Spinner color="$accent" /> : undefined}
 								>
 									{cleaningUp ? "Cleaning up..." : "Remove All Unverified"}
 								</Button>
@@ -246,7 +246,7 @@ export function MFASettings() {
 									theme="red"
 									onPress={() => handleRemoveFactor(factor.id)}
 									disabled={removing === factor.id}
-									icon={removing === factor.id ? () => <Spinner /> : undefined}
+									icon={removing === factor.id ? () => <Spinner color="$accent" /> : undefined}
 								>
 									{removing !== factor.id && "Remove"}
 								</Button>

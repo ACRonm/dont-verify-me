@@ -146,7 +146,7 @@ export function TOTPChallenge({
 					</Text>
 				)}
 
-				{loading && <Spinner size="small" />}
+				{loading && <Spinner color="$accent" size="small" />}
 
 				<Text fontSize={12} color="$gray10" textAlign="center">
 					🔒 Encrypted

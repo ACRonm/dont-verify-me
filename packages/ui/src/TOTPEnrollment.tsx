@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { YStack, XStack, Text, Input, Button, Spinner } from "tamagui";
+import { YStack, XStack, Text, Input, Button, Spinner color="$accent" } from "tamagui";
 
 interface TOTPEnrollmentProps {
 	onEnrolled: () => void;
@@ -119,7 +119,7 @@ export function TOTPEnrollment({
 		return (
 			<YStack flex={1} alignItems="center" justifyContent="center" padding="$6">
 				<Text>Loading...</Text>
-				<Spinner size="large" />
+				<Spinner color="$accent" size="large" />
 			</YStack>
 		);
 	}
@@ -249,7 +249,7 @@ export function TOTPEnrollment({
 					theme="active"
 					onPress={handleEnable}
 					disabled={verifyCode.length !== 6 || verifying}
-					icon={verifying ? () => <Spinner /> : undefined}
+					icon={verifying ? () => <Spinner color="$accent" /> : undefined}
 				>
 					{verifying ? "Verifying..." : "Enable"}
 				</Button>
