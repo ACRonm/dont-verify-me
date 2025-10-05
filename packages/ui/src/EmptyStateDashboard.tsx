@@ -36,13 +36,20 @@ export function EmptyStateDashboard({
 				alignItems="center"
 				gap="$5"
 			>
-				<YStack style={imageStyle}>
+				<YStack
+					style={imageStyle}
+					width={250}
+					height={250}
+					alignItems="center"
+					justifyContent="center"
+				>
 					<Image
 						source={{
 							uri: `${themeName === "dark" ? "/logo_final_dark_optimised.svg" : "/logo_final_light_optimised.svg"}`,
 						}}
 						width={250}
 						height={250}
+						resizeMode="contain"
 					/>
 				</YStack>
 
