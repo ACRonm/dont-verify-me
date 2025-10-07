@@ -10,5 +10,13 @@ module.exports = function (name, { defaultConfig }) {
 		disableExtraction: process.env.NODE_ENV === "development",
 	});
 
-	return tamaguiPlugin(defaultConfig);
+	return tamaguiPlugin({
+		...defaultConfig,
+		compiler: {
+			// Remove React properties for production optimization
+			...(process.env.NODE_ENV === "production" && {
+				reactRemoveProperties: true,
+			}),
+		},
+	});
 };

@@ -42,5 +42,22 @@
 		"prettier": "^3.6.2",
 		"tailwindcss": "^4",
 		"typescript": "^5"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all",
+			"not IE 11",
+			"not Chrome < 91",
+			"not Firefox < 90",
+			"not Safari < 14",
+			"not Edge < 91"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	}
 }

@@ -13,13 +13,11 @@ export {
 export { default as tamaguiConfig } from "./tamagui.config";
 export * from "./CustomButton";
 export * from "./EmptyStateDashboard";
-export * from "./MaintenanceLogTable";
 export * from "./QuickStatsHeader";
 export * from "./StatsGraphCard";
 export * from "./tamagui.config";
 export * from "./ThemedPage";
 export * from "./themes";
-export * from "./MaintenanceLogTable.Skeleton";
 export * from "./Skeleton";
 export * from "./QuickActions";
 export * from "./QuickActions.Skeleton";
@@ -29,7 +27,7 @@ export * from "./AlertsPanel.Skeleton";
 export * from "./AppBar";
 export * from "./BottomNavBar";
 
-// New CMS components
+// CMS components
 export * from "./PlatformCard";
 export * from "./PlatformForm";
 export * from "./PlatformIconUploader";

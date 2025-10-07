@@ -3,6 +3,7 @@
 import { Card, XStack, YStack, H3, Text, View } from "tamagui";
 import { ArrowRight } from "@tamagui/lucide-icons";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import type { Platform } from "@dont-verify-me/shared-logic";
 
 interface PublicPlatformCardProps {
@@ -58,10 +59,12 @@ export function PublicPlatformCard({
 					overflow="hidden"
 				>
 					{platform.icon_url ? (
-						<img
+						<Image
+							width={40}
+							height={40}
+							objectFit="contain"
 							src={platform.icon_url}
 							alt={`${platform.name} icon`}
-							style={{ width: 40, height: 40, objectFit: "contain" }}
 							onError={(e) => {
 								// Fallback to letter if image fails to load
 								e.currentTarget.style.display = "none";
