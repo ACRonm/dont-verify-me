@@ -52,10 +52,13 @@ export function ShareArticle({
 	return (
 		<XStack
 			alignItems="center"
-			gap="$3"
+			gap="$2"
 			maxWidth={896}
 			alignSelf="center"
 			width="100%"
+			$sm={{
+				gap: "$1.5",
+			}}
 		>
 			{/* URL Bar with integrated Copy Link Button */}
 			<XStack
@@ -120,10 +123,24 @@ export function ShareArticle({
 				paddingVertical="$3.5"
 				borderRadius={9999}
 				flexShrink={0}
-				iconAfter={<Share2 size={16} color="white" />}
+				icon={<Share2 size={20} color="white" />}
 				chromeless
+				$sm={{
+					circular: true,
+					padding: 0,
+					height: 48,
+					width: 48,
+					justifyContent: "center",
+					alignItems: "center",
+				}}
 			>
-				<Text color="white" fontWeight="500">
+				<Text
+					color="white"
+					fontWeight="500"
+					$sm={{
+						display: "none",
+					}}
+				>
 					Share article
 				</Text>
 			</Button>
