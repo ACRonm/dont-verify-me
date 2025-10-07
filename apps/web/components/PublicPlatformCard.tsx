@@ -4,7 +4,6 @@ import { Card, XStack, YStack, H3, Text, View } from "tamagui";
 import { ArrowRight } from "@tamagui/lucide-icons";
 import { useRouter } from "next/navigation";
 import type { Platform } from "@dont-verify-me/shared-logic";
-import { getPlatformIconUrl } from "../lib/platformIcons";
 
 interface PublicPlatformCardProps {
 	platform: Platform;
@@ -58,9 +57,9 @@ export function PublicPlatformCard({
 					backgroundColor="$background"
 					overflow="hidden"
 				>
-					{platform.icon_url || platform.slug ? (
+					{platform.icon_url ? (
 						<img
-							src={getPlatformIconUrl(platform.slug, platform.icon_url)}
+							src={platform.icon_url}
 							alt={`${platform.name} icon`}
 							style={{ width: 40, height: 40, objectFit: "contain" }}
 							onError={(e) => {

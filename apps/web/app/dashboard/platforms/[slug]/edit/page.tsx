@@ -8,9 +8,11 @@ import {
 	getArticleByPlatformId,
 	createArticle,
 	updateArticle,
+	updatePlatform,
 	generateSlug,
 	Platform,
 	Article,
+	supabase,
 } from "@dont-verify-me/shared-logic";
 import { YStack, Spinner, Text } from "tamagui";
 
@@ -77,6 +79,21 @@ export default function EditArticlePage({
 		router.push("/dashboard");
 	};
 
+	const handleIconUpdate = async (newIconUrl: string) => {
+		if (!platform) return;
+
+		try {
+			await updatePlatform(platform.id, {
+				icon_url: newIconUrl || null,
+			});
+			// Update local state to reflect the change
+			setPlatform({ ...platform, icon_url: newIconUrl || null });
+		} catch (error) {
+			console.error("Failed to update platform icon:", error);
+			throw error; // Re-throw so the uploader can catch it
+		}
+	};
+
 	if (loading) {
 		return (
 			<ThemedPage>
@@ -116,9 +133,10 @@ export default function EditArticlePage({
 						onSave={handleSave}
 						onCancel={handleCancel}
 						platformName={platform.name}
-						platformIconUrl={
-							platform.icon_url || `/icons/platforms/${platform.slug}.svg`
-						}
+						platformIconUrl={platform.icon_url}
+						platformSlug={platform.slug}
+						onIconUpdate={handleIconUpdate}
+						supabase={supabase}
 					/>
 				</YStack>
 			</YStack>

@@ -36,6 +36,7 @@ import {
 	Edit3,
 } from "@tamagui/lucide-icons";
 import { ShareArticle } from "./ShareArticle";
+import { PlatformIconUploader } from "./PlatformIconUploader";
 import "./editor-styles.css";
 
 interface ArticleEditorProps {
@@ -44,6 +45,9 @@ interface ArticleEditorProps {
 	onCancel: () => void;
 	platformName: string;
 	platformIconUrl?: string;
+	platformSlug?: string;
+	onIconUpdate?: (newIconUrl: string) => void;
+	supabase?: any;
 }
 
 export function ArticleEditor({
@@ -52,6 +56,9 @@ export function ArticleEditor({
 	onCancel,
 	platformName,
 	platformIconUrl,
+	platformSlug,
+	onIconUpdate,
+	supabase,
 }: ArticleEditorProps) {
 	const [title, setTitle] = useState(initialData?.title || "");
 	const [summary, setSummary] = useState(initialData?.summary || "");
@@ -211,6 +218,21 @@ export function ArticleEditor({
 									: "Article is hidden (draft)"}
 							</Text>
 						</XStack>
+						{supabase && platformSlug && onIconUpdate && (
+							<YStack>
+								<Separator marginVertical="$4" />
+								<PlatformIconUploader
+									platformSlug={platformSlug}
+									currentIconUrl={platformIconUrl || ""}
+									onIconUpdate={onIconUpdate}
+									supabase={supabase}
+								/>
+								<Text fontSize="$2" color="$color11" marginTop="$2">
+									Update the platform icon for {platformName}
+								</Text>
+								<Separator marginVertical="$4" />
+							</YStack>
+						)}
 						<YStack gap="$2">
 							<Label>Content</Label>
 							<XStack
@@ -303,9 +325,6 @@ export function ArticleEditor({
 							>
 								<EditorContent editor={editor} />
 							</YStack>
-							<Text fontSize="$2" color="$color10">
-								Rich text editor with formatting support
-							</Text>
 						</YStack>
 						{error.length > 0 && (
 							<Text color="$red10" fontSize="$3">

@@ -2,23 +2,27 @@ import { YStack, XStack, Input, TextArea, Label, Button, Text } from "tamagui";
 import { useState } from "react";
 import type { Platform } from "@dont-verify-me/shared-logic";
 import { generateSlug } from "@dont-verify-me/shared-logic";
+import { PlatformIconUploader } from "./PlatformIconUploader";
 
 interface PlatformFormProps {
 	initialData?: Partial<Platform>;
 	onSave: (platform: Partial<Platform>) => Promise<void>;
 	onCancel: () => void;
+	supabase?: any; // Optional Supabase client for icon uploads
 }
 
 export function PlatformForm({
 	initialData,
 	onSave,
 	onCancel,
+	supabase,
 }: PlatformFormProps) {
 	const [name, setName] = useState(initialData?.name || "");
 	const [slug, setSlug] = useState(initialData?.slug || "");
 	const [description, setDescription] = useState(
 		initialData?.description || ""
 	);
+	const [iconUrl, setIconUrl] = useState(initialData?.icon_url || "");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
@@ -44,6 +48,7 @@ export function PlatformForm({
 				name: name.trim(),
 				slug: slug.trim(),
 				description: description.trim(),
+				icon_url: iconUrl.trim() || undefined,
 				is_published: initialData?.is_published || false,
 				display_order: initialData?.display_order || 0,
 			});
@@ -87,7 +92,7 @@ export function PlatformForm({
 				<Text fontSize="$2" color="$color10">
 					Will be used in URL: /platforms/{slug}
 				</Text>
-			</YStack>{" "}
+			</YStack>
 			<YStack gap="$2">
 				<Label htmlFor="description">Description (Optional)</Label>
 				<TextArea
@@ -99,6 +104,14 @@ export function PlatformForm({
 					numberOfLines={3}
 				/>
 			</YStack>
+			{supabase && (
+				<PlatformIconUploader
+					platformSlug={slug || "temp"}
+					currentIconUrl={iconUrl}
+					onIconUpdate={setIconUrl}
+					supabase={supabase}
+				/>
+			)}
 			{error && (
 				<Text color="$red10" fontSize="$3">
 					{error}

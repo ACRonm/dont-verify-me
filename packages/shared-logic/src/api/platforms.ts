@@ -151,16 +151,27 @@ export async function updatePlatform(
 	id: string,
 	updates: Partial<Platform>
 ): Promise<Platform> {
-	const { data, error } = await supabase
+	// First do the update without trying to select the result
+	const { error: updateError } = await supabase
 		.from("platforms")
 		.update(updates)
-		.eq("id", id)
+		.eq("id", id);
+
+	if (updateError) {
+		console.error("Error updating platform:", updateError);
+		throw updateError;
+	}
+
+	// Then fetch the updated platform separately
+	const { data, error: selectError } = await supabase
+		.from("platforms")
 		.select()
+		.eq("id", id)
 		.single();
 
-	if (error) {
-		console.error("Error updating platform:", error);
-		throw error;
+	if (selectError) {
+		console.error("Error fetching updated platform:", selectError);
+		throw selectError;
 	}
 
 	return data;

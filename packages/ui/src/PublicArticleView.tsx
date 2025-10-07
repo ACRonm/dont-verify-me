@@ -27,8 +27,8 @@ export function PublicArticleView({
 	const url =
 		shareUrl || (typeof window !== "undefined" ? window.location.href : "");
 
-	// Use icon_url from database, or fallback to local icon based on slug
-	const iconUrl = platform.icon_url || `/icons/platforms/${platform.slug}.svg`;
+	// Use icon_url from database
+	const iconUrl = platform.icon_url;
 
 	return (
 		<ScrollView flex={1} marginTop={"$6"}>

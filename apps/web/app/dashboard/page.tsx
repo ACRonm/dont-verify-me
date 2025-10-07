@@ -10,6 +10,7 @@ import {
 	deletePlatform,
 	togglePlatformPublish,
 	Platform,
+	supabase,
 } from "@dont-verify-me/shared-logic";
 import { useRouter } from "next/navigation";
 import { YStack, H1, ScrollView, Text, Spinner, XStack, Button } from "tamagui";
@@ -129,9 +130,9 @@ export default function DashboardPage() {
 						<PlatformForm
 							onSave={handleCreatePlatform}
 							onCancel={() => setShowCreateForm(false)}
+							supabase={supabase}
 						/>
 					)}
-
 					<YStack gap="$3">
 						{platforms.length === 0 ? (
 							<Text color="$color11" textAlign="center" padding="$6">
