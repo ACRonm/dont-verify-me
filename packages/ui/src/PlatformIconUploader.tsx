@@ -11,7 +11,12 @@ interface PlatformIconUploaderProps {
 	supabase: any; // Supabase client instance
 }
 
-const ACCEPTED_FILE_TYPES = ["image/svg+xml", "image/png", "image/jpeg", "image/webp"];
+const ACCEPTED_FILE_TYPES = [
+	"image/svg+xml",
+	"image/png",
+	"image/jpeg",
+	"image/webp",
+];
 const MAX_FILE_SIZE = 512 * 1024; // 512KB
 const BUCKET_NAME = "platform-icons";
 
@@ -37,7 +42,9 @@ export function PlatformIconUploader({
 		return null;
 	};
 
-	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFileSelect = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
 		const file = event.target.files?.[0];
 		if (!file) return;
 

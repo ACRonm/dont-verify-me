@@ -126,7 +126,9 @@ export async function deletePlatformIcon(
 			};
 		}
 
-		const { error } = await supabase.storage.from(BUCKET_NAME).remove([filePath]);
+		const { error } = await supabase.storage
+			.from(BUCKET_NAME)
+			.remove([filePath]);
 
 		if (error) {
 			return {
