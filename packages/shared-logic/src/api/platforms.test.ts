@@ -94,30 +94,43 @@ describe("Platforms API - Authentication Tests", () => {
 		it("should update a platform when properly authenticated", async () => {
 			const updates = { name: "Updated Platform" };
 
-			const mockSelect = jest.fn().mockReturnValue({
-				single: jest.fn().mockResolvedValue({
-					data: { ...mockPlatformResponse, ...updates },
-					error: null,
-				}),
+			// Mock for the select call (second call)
+			const mockSelectSingle = jest.fn().mockResolvedValue({
+				data: { ...mockPlatformResponse, ...updates },
+				error: null,
 			});
 
-			const mockEq = jest.fn().mockReturnValue({
-				select: mockSelect,
+			const mockSelectEq = jest.fn().mockReturnValue({
+				single: mockSelectSingle,
+			});
+
+			const mockSelect = jest.fn().mockReturnValue({
+				eq: mockSelectEq,
+			});
+
+			// Mock for the update call (first call)
+			const mockUpdateEq = jest.fn().mockResolvedValue({
+				error: null,
 			});
 
 			const mockUpdate = jest.fn().mockReturnValue({
-				eq: mockEq,
+				eq: mockUpdateEq,
 			});
 
-			(supabase.from as jest.Mock).mockReturnValue({
-				update: mockUpdate,
-			});
+			// Setup from to return different mocks on consecutive calls
+			(supabase.from as jest.Mock)
+				.mockReturnValueOnce({
+					update: mockUpdate,
+				})
+				.mockReturnValueOnce({
+					select: mockSelect,
+				});
 
 			const result = await updatePlatform("platform-123", updates);
 
 			expect(supabase.from).toHaveBeenCalledWith("platforms");
 			expect(mockUpdate).toHaveBeenCalledWith(updates);
-			expect(mockEq).toHaveBeenCalledWith("id", "platform-123");
+			expect(mockUpdateEq).toHaveBeenCalledWith("id", "platform-123");
 			expect(result.name).toBe("Updated Platform");
 		});
 
@@ -125,19 +138,13 @@ describe("Platforms API - Authentication Tests", () => {
 			const updates = { name: "Updated Platform" };
 			const authError = { message: "Not authorized", code: "42501" };
 
-			const mockSelect = jest.fn().mockReturnValue({
-				single: jest.fn().mockResolvedValue({
-					data: null,
-					error: authError,
-				}),
-			});
-
-			const mockEq = jest.fn().mockReturnValue({
-				select: mockSelect,
+			// Mock for the update call (first call) - this should fail with auth error
+			const mockUpdateEq = jest.fn().mockResolvedValue({
+				error: authError,
 			});
 
 			const mockUpdate = jest.fn().mockReturnValue({
-				eq: mockEq,
+				eq: mockUpdateEq,
 			});
 
 			(supabase.from as jest.Mock).mockReturnValue({
