@@ -294,7 +294,7 @@ describe("Platforms API - Authentication Tests", () => {
 
 	describe("TOGGLE Platform Publish - Authentication Required (via RLS)", () => {
 		it("should toggle publish status when authenticated", async () => {
-			// Mock fetching current status
+			// Mock fetching current status (first call)
 			const mockSingleForFetch = jest.fn().mockResolvedValue({
 				data: { is_published: false },
 				error: null,
@@ -308,34 +308,34 @@ describe("Platforms API - Authentication Tests", () => {
 				eq: mockEqForFetch,
 			});
 
-			// Mock update operation
-			const mockSingleForUpdate = jest.fn().mockResolvedValue({
-				data: { ...mockPlatformResponse, is_published: true },
+			// Mock update operation (second call - updatePlatform's update)
+			const mockEqForUpdate = jest.fn().mockResolvedValue({
 				error: null,
-			});
-
-			const mockSelectForUpdate = jest.fn().mockReturnValue({
-				single: mockSingleForUpdate,
-			});
-
-			const mockEqForUpdate = jest.fn().mockReturnValue({
-				select: mockSelectForUpdate,
 			});
 
 			const mockUpdate = jest.fn().mockReturnValue({
 				eq: mockEqForUpdate,
 			});
 
-			// Setup the mock to return different values based on call order
-			let callCount = 0;
-			(supabase.from as jest.Mock).mockImplementation(() => {
-				callCount++;
-				if (callCount === 1) {
-					return { select: mockSelectForFetch };
-				} else {
-					return { update: mockUpdate };
-				}
+			// Mock select after update (third call - updatePlatform's select)
+			const mockSingleForSelect = jest.fn().mockResolvedValue({
+				data: { ...mockPlatformResponse, is_published: true },
+				error: null,
 			});
+
+			const mockEqForSelect = jest.fn().mockReturnValue({
+				single: mockSingleForSelect,
+			});
+
+			const mockSelectAfterUpdate = jest.fn().mockReturnValue({
+				eq: mockEqForSelect,
+			});
+
+			// Setup the mock to return different values based on call order
+			(supabase.from as jest.Mock)
+				.mockReturnValueOnce({ select: mockSelectForFetch })  // First: get current status
+				.mockReturnValueOnce({ update: mockUpdate })          // Second: update
+				.mockReturnValueOnce({ select: mockSelectAfterUpdate }); // Third: select updated
 
 			const result = await togglePlatformPublish("platform-123");
 
